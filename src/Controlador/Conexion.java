@@ -12,11 +12,14 @@ public class Conexion {
         //Objeto Tipo conexion que contiene todos los parametros para interactuar 
         //con la BD se crea un objeto tipo con
     public static Connection conPostgres;
-    public static Connection con2Mysql;
+    public static Connection conMysql;
+    
+    //Lo necesario para conectarnos con la base de datos correctamente
+    public static String nombre = "sergio";
     
     public Statement objeto;
    
-    public static boolean crearConexionPostgres(String pass, String nombre)
+    public static boolean crearConexionPostgres(String pass)
     {
         
          try
@@ -35,7 +38,7 @@ public class Conexion {
             {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url = "jdbc:postgresql://localhost:5432/HOSPITAL";
+                    String url = "jdbc:postgresql://192.168.137.130:5432/HOSPITAL";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
@@ -43,9 +46,8 @@ public class Conexion {
                     //DriverManager.getConnection es el servicio que permite establecer
                     //la conexion ABRIR CONEXION!!!
                     conPostgres = DriverManager.getConnection(url, nombre, pass);
-                    //con = DriverManager.getConnection(url2, nombre, pass);
                     
-                    JOptionPane.showMessageDialog(null, "Conexion POSTGRES exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
+                    //JOptionPane.showMessageDialog(null, "Conexion POSTGRES exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
                     return true;
 
             }
@@ -62,7 +64,7 @@ public class Conexion {
     }
     
     
-    public static boolean crearConexionMysql(String pass, String nombre)
+    public static boolean crearConexionMysql(String pass)
     {
         
          try
@@ -80,16 +82,16 @@ public class Conexion {
             {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url2 = "jdbc:mysql://localhost:3306/HOSPITAL?useSSL=false";
+                    String url2 = "jdbc:mysql://192.168.137.130:3306/HOSPITAL?useSSL=false";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
                     //posee seguridad y por ultimo la clave
                     //DriverManager.getConnection es el servicio que permite establecer
                     //la conexion ABRIR CONEXION!!!
-                    con2Mysql = DriverManager.getConnection(url2, nombre, pass);
+                    conMysql = DriverManager.getConnection(url2, nombre, pass);
                     
-                    JOptionPane.showMessageDialog(null, "Conexion MYSQL exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
+                    //JOptionPane.showMessageDialog(null, "Conexion MYSQL exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
                     return true;
 
             }
@@ -105,9 +107,42 @@ public class Conexion {
             }
     }
 
-    
-    public Boolean validarCompañia(String usuario, String contraseña) throws SQLException
+  
+    public Boolean validarCompañia(String contraseña) throws SQLException
     {
+
+       String usuario = "Sanitas";
+       ResultSet RsetPost;
+       ResultSet RsetMysQL;
+       PreparedStatement comprobacion;
+       
+       String consulta = "SELECT * FROM COMPAÑIA WHERE COD_COMP= ?";
+       
+       
+       comprobacion = conPostgres.prepareStatement(consulta,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+       
+       comprobacion.setInt(1,Integer.parseInt(contraseña));
+       
+       RsetPost = comprobacion.executeQuery();
+       
+       comprobacion = conMysql.prepareStatement(consulta,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+       
+       comprobacion.setInt(1,Integer.parseInt(contraseña));
+       
+       RsetMysQL = comprobacion.executeQuery();
+       
+       
+       if (RsetPost.next() && RsetMysQL.next())
+       {         
+           System.out.println("Inicio de sesion bien");
+           return true;
+       }
+       else
+       {
+           System.out.println("Inicio de sesion mal");
+           return false;
+       }
+        /*
             ResultSet result;
             
             objeto = conPostgres.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -125,7 +160,9 @@ public class Conexion {
                 //Haria falta hacer el throws
                 return false;
             }
+        */
     }
+
 
     //Metodo para cerrar la conexion con la base de datos
     public static void cerrarConexion()
@@ -134,7 +171,7 @@ public class Conexion {
         {
             //Cierra la conexion de la Base de Datos
             conPostgres.close();
-            con2Mysql.close();
+            conMysql.close();
             System.out.println("Cerrada la conexion con la Base de Datos");
         }
         catch(SQLException e)

@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import Controlador.Conexion;
+
 /**
  *
  * @author Sergio
@@ -31,7 +33,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        botonConexion = new javax.swing.JMenuItem();
         botonInicioSesionCompañia = new javax.swing.JMenuItem();
         botonVisualizarMedicos = new javax.swing.JMenuItem();
         botonAltaMedico = new javax.swing.JMenuItem();
@@ -47,15 +48,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenu1.setText("Menú");
 
-        botonConexion.setText("Conexion");
-        botonConexion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonConexionActionPerformed(evt);
-            }
-        });
-        jMenu1.add(botonConexion);
-
-        botonInicioSesionCompañia.setText("Iniciar sesion Compañia");
+        botonInicioSesionCompañia.setText("Iniciar sesion");
         botonInicioSesionCompañia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonInicioSesionCompañiaActionPerformed(evt);
@@ -112,15 +105,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonConexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConexionActionPerformed
-        
-            String contraseña;
-            
-            pedirContraseña pC = new pedirContraseña(this,true);
-            pC.setTitle("Conexion");
-            pC.setVisible(true);
-    }//GEN-LAST:event_botonConexionActionPerformed
-
     private void botonVisualizarMedicosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVisualizarMedicosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonVisualizarMedicosActionPerformed
@@ -134,16 +118,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void botonInicioSesionCompañiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonInicioSesionCompañiaActionPerformed
                 
-        InicioSesion objeto = new InicioSesion();
-        this.setContentPane(objeto);
-        this.pack();
+        pedirContraseña objeto = new pedirContraseña(this, true);
+        objeto.setTitle("Iniciar sesión");
+        objeto.setVisible(true);
     }//GEN-LAST:event_botonInicioSesionCompañiaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem botonAcercaDe;
     private javax.swing.JMenuItem botonAltaMedico;
-    private javax.swing.JMenuItem botonConexion;
     private javax.swing.JMenuItem botonInicioSesionCompañia;
     private javax.swing.JMenuItem botonVisualizarMedicos;
     private javax.swing.JLabel jLabel1;

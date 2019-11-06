@@ -9,17 +9,9 @@
             <Property name="text" type="java.lang.String" value="Men&#xfa;"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="botonConexion">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Conexion"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonConexionActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="botonInicioSesionCompa&#xf1;ia">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Iniciar sesion Compa&#xf1;ia"/>
+                <Property name="text" type="java.lang.String" value="Iniciar sesion"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonInicioSesionCompa&#xf1;iaActionPerformed"/>
