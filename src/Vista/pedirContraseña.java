@@ -11,6 +11,7 @@ import static Controlador.Conexion.crearConexionPostgres;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -137,6 +138,7 @@ public class pedirContraseña extends javax.swing.JDialog {
             dispose();
             } catch (SQLException ex) {
             Logger.getLogger(pedirContraseña.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Usuario o  Contraseña incorrecto" ,"Error", JOptionPane.ERROR_MESSAGE);
             }
             
             dispose();

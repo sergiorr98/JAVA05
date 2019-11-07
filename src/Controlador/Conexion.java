@@ -107,6 +107,14 @@ public class Conexion {
             }
     }
 
+    public  Statement crearSentencia() throws SQLException
+    {
+        objeto = conPostgres.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                   
+        return objeto;
+    }
+    
+    
   
     public Boolean validarCompañia(String contraseña) throws SQLException
     {
@@ -142,25 +150,6 @@ public class Conexion {
            System.out.println("Inicio de sesion mal");
            return false;
        }
-        /*
-            ResultSet result;
-            
-            objeto = conPostgres.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            
-            result = objeto.executeQuery("SELECT NOMBRE_COMP, COD_COMP FROM COMPAÑIA WHERE NOMBRE_COMP =\'"+usuario+"\' AND COD_COMP ="+contraseña+";");
-            
-            if (result.next())
-            {
-                JOptionPane.showMessageDialog(null, "Bienvenida compañia "+usuario ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);    
-                return true;
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Usuario o contraseña erroneos "+result.getRow() ,"Error", JOptionPane.ERROR_MESSAGE);
-                //Haria falta hacer el throws
-                return false;
-            }
-        */
     }
 
 
@@ -178,6 +167,10 @@ public class Conexion {
         {
             System.out.println("Error al cerrar la conexion con la Base de datos. \n"+e);
         }
+    }
+
+    com.mysql.jdbc.PreparedStatement prepareStatement(String consulta, int TYPE_SCROLL_SENSITIVE, int CONCUR_UPDATABLE) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
