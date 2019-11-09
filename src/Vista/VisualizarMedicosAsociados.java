@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
 
 /**
  *
