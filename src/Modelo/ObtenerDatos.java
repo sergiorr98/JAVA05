@@ -76,7 +76,8 @@ public class ObtenerDatos {
     public Object devolverObjetoConsultaMedico()
     {
         try {
-             return gestion.objetoConsulta();
+             Consulta objeto = (Consulta) gestion.objetoConsulta();
+             return objeto;
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
             return null;

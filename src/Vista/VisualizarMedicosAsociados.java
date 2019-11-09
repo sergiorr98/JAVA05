@@ -96,9 +96,10 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             else
                 if (tamaño == 1)
                 {
+                   Consulta objeto = (Consulta) objetoObtenerDatos.devolverObjetoConsultaMedico();
                    Object vector[]; //Creamos un vector de tipo objeto
-                   //vector = obtenerDatos(objetoObtenerDatos.devolverObjetoConsultaMedico()); //El vector se rellena
-                   //modelo.addRow(vector); //Se añade al modelo
+                   vector = obtenerDatos(objeto); //El vector se rellena
+                   modelo.addRow(vector); //Se añade al modelo
                 }
         } catch (Errores ex) {
             Logger.getLogger(VisualizarMedicosAsociados.class.getName()).log(Level.SEVERE, null, ex);
