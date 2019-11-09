@@ -4,6 +4,7 @@ package Modelo;
 import Controlador.Errores;
 import Controlador.GestionOperaciones;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +41,62 @@ public class ObtenerDatos {
         } catch (SQLException ex) {
                 System.out.println(ex.toString());
                 return 0;
+        }
+    }
+    
+    public int mostrarConsultaMedico (String codigo)
+    {
+        int codigoMedico = Integer.parseInt(codigo);
+        int numeroFilas=0;
+        
+        String consulta = "SELECT * FROM CONSULTA WHERE MED_CON = ?";
+        
+        try {
+            numeroFilas = gestion.selectConsultaMedico(consulta, codigoMedico);
+        } catch (SQLException ex) {
+            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        System.out.println("El numero de filas del medico "+codigo+" es "+numeroFilas);
+        return numeroFilas;
+    }
+    
+    public ArrayList devolverArrayConsultaMedico()
+    {
+        ArrayList <Consulta> array = new ArrayList();
+        
+        try {
+            return array = gestion.listaConsultas();
+        } catch (SQLException ex) {
+            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public Object devolverObjetoConsultaMedico()
+    {
+        try {
+             return gestion.objetoConsulta();
+        } catch (SQLException ex) {
+            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        
+    }
+
+    
+    public ArrayList mostrarPacientes()
+    {
+        String consulta = "SELECT * FROM PACIENTE";
+        
+        ArrayList <Paciente> array = new ArrayList();
+        
+        try {
+            array = gestion.selectPaciente(consulta);
+            return array;
+        } catch (SQLException ex) {
+            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     

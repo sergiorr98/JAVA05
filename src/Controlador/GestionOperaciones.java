@@ -1,16 +1,21 @@
 
 package Controlador;
 
+import Modelo.Consulta;
+import Modelo.Paciente;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 
 
 public class GestionOperaciones {
     
-     ResultSet datos;
+     ResultSet datosMedicos;
+     ResultSet datosConsultasMedicas;
+     ResultSet datosPacientes;
      
      Statement sentencia;
      PreparedStatement sentenciaPreparada;
@@ -27,59 +32,55 @@ public class GestionOperaciones {
          }
         
     }
-     
-     
-     
-    
+
     public void MostrarMedicos (String consulta) throws SQLException
     {
 
-        datos = sentencia.executeQuery(consulta);
-        
+        datosMedicos = sentencia.executeQuery(consulta);   
     }
         
     //Metodo para avanzar
     public void avanzar() throws SQLException
     {
-        datos.next();
+        datosMedicos.next();
     }
     
     //Metodo para retroceder
     public void retroceder() throws SQLException
     {
-        datos.previous();
+        datosMedicos.previous();
     }
     
     //Metodo para acceder al primero
     public void primero() throws SQLException
     {
-        datos.beforeFirst();
-        datos.next(); //Esto se hace para colocarnos correctamente en la celda
+        datosMedicos.beforeFirst();
+        datosMedicos.next(); //Esto se hace para colocarnos correctamente en la celda
     }
     
     //Metodo para acceder al ultimo
     public void ultimo() throws SQLException
     {
-        datos.afterLast();
-        datos.previous(); //Esto se hace para colocarnos correctamente en la celda
+        datosMedicos.afterLast();
+        datosMedicos.previous(); //Esto se hace para colocarnos correctamente en la celda
     }
     
     //Metodo que devuelve "TRUE" si es el primero
     public boolean isFirst() throws SQLException
     {
-        return datos.isFirst();
+        return datosMedicos.isFirst();
     }
     
     //Metodo que devuelve "TRUE" si es el ultimo
     public boolean isLast() throws SQLException
     {
-        return datos.isLast();
+        return datosMedicos.isLast();
     }
     
     //Metodo que devuelve una columa pasandole como parametro un indice
     public String devolverColumna(int i) throws SQLException
     {
-        return datos.getString(i);
+        return datosMedicos.getString(i);
     }
     
     
@@ -99,72 +100,67 @@ public class GestionOperaciones {
                 
     }
     
-     
-  /*   
-    public Object select(String consulta) throws SQLException
+    public int selectConsultaMedico (String consulta, int codigoMedico) throws SQLException
     {
-        Conexion con = new Conexion();
-        Object obj = new Object();
-          
-        datos = con.crearSentencia().executeQuery(consulta); //El "executeQuery" devuelve datos
+
+        ResultSet copia;
         
-        datos.last(); //me voy al último
-        int tamano = datos.getRow(); //capturo el tamaño
-        datos.beforeFirst(); // lo dejo donde estaba para tratarlo
+        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         
-        if (tamano == 1)
+        sentenciaPreparada.setInt(1,codigoMedico);
+    
+        datosConsultasMedicas = sentenciaPreparada.executeQuery();
+                
+        copia = datosConsultasMedicas;
+        copia.last();
+        int tamaño = copia.getRow();
+        copia.first();
+        
+        return tamaño;
+    }
+    
+    public ArrayList listaConsultas() throws SQLException
+    {
+        ArrayList <Consulta> array = new ArrayList();
+        
+        int cont=0;
+        Consulta obj = new Consulta(datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
+        array.add(obj);
+        while(datosConsultasMedicas.next()!=false)
         {
-            obj = datos;
-            return obj;
+            obj = new Consulta(datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
+            array.add(obj);
+            cont++;
+            System.out.println("Cuantos"+cont);
         }
-        else
+        
+        return array;
+    }
+    
+    public Object objetoConsulta() throws SQLException
+    {
+        Consulta objeto = new Consulta (datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
+        return objeto;
+    }
+    
+    
+    public ArrayList selectPaciente(String consulta) throws SQLException
+    {
+        ArrayList <Paciente> array = new ArrayList();
+        
+        datosPacientes = sentencia.executeQuery(consulta);  
+        
+        datosPacientes.next();
+        
+        Paciente obj = new Paciente(datosPacientes.getInt(1),datosPacientes.getString(2), datosPacientes.getInt(3));
+        array.add(obj);
+        
+        while(datosPacientes.next()!= false)
         {
-            ArrayList array = new ArrayList();
-            while(datos.next()!= false)
-            {
-                array.add(datos);
-            }
-            return array;
+            obj = new Paciente(datosPacientes.getInt(1),datosPacientes.getString(2), datosPacientes.getInt(3));
+            array.add(obj);
         }
+        
+        return array;
     }
- */
-    /*   
-    public ResultSet selectTablaB (String codigo_medico) throws SQLException
-    {
-       Conexion con = new Conexion();
-        
-       ResultSet Rset;
-       PreparedStatement PreparedS;
-       
-       String consulta = "SELECT * FROM MEDICO WHERE COD_MED = ?";
-       
-       
-       PreparedS = con.prepareStatement(consulta,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-       
-       PreparedS.setInt(1,Integer.parseInt(codigo_medico));
-       
-       Rset = PreparedS.executeQuery();
-       
-       return Rset;
-    }
-    
-    
-    public int insert (String consulta) throws SQLException
-    {
-        Conexion con = new Conexion();
-        
-        con.crearSentencia().execute(consulta); // El "execute" no devuelve datos
-        
-        return 1; //Porque los insert solo devuelven un 1
-    }
-    
-    public int udpate (String consulta) throws SQLException
-    {
-        Conexion con = new Conexion();
-        
-        con.crearSentencia().execute(consulta); // El "execute" no devuelve datos
-        
-        return 1; //Hay que cambiar esto
-    }
- */ 
 }

@@ -41,7 +41,7 @@ public class Conexion {
             {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url = "jdbc:postgresql://localhost:5432/HOSPITAL";
+                    String url = "jdbc:postgresql://192.168.137.130:5432/HOSPITAL";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
@@ -89,7 +89,7 @@ public class Conexion {
             {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url2 = "jdbc:mysql://localhost:3306/HOSPITAL?useSSL=false";
+                    String url2 = "jdbc:mysql://192.168.137.130:3306/HOSPITAL?useSSL=false";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos

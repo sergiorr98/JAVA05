@@ -19,6 +19,11 @@ public class Consulta {
         this.tiempo = tiempo;
         this.precio_total = precio_total;
     }
+    
+    public Consulta()
+    {
+        
+    }
 
     public int getMed_con() {
         return med_con;
