@@ -16,11 +16,14 @@ public class Conexion {
     
     //Lo necesario para conectarnos con la base de datos correctamente
     public static String nombre = "sergio";
+    public static String contraseña = "sergio";
     
     public Statement objeto;
    
-    public static boolean crearConexionPostgres(String pass)
+    public static void crearConexionPostgres(String pass) throws Errores
     {
+        if (pass.equalsIgnoreCase(contraseña))
+        {
         
          try
             {
@@ -38,7 +41,7 @@ public class Conexion {
             {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url = "jdbc:postgresql://192.168.137.130:5432/HOSPITAL";
+                    String url = "jdbc:postgresql://localhost:5432/HOSPITAL";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
@@ -48,24 +51,28 @@ public class Conexion {
                     conPostgres = DriverManager.getConnection(url, nombre, pass);
                     
                     //JOptionPane.showMessageDialog(null, "Conexion POSTGRES exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
-                    return true;
 
             }
             catch (SQLException ex) 
             {
                 JOptionPane.showMessageDialog(null, "Error en la conexion con la base de datos" ,"Error", JOptionPane.ERROR_MESSAGE);
-                return false;
             }
             catch (java.lang.Exception ex) 
             {
                 ex.printStackTrace ();
-                return false;
             }
+        }
+        else
+        {
+            throw new Errores(1);
+        }
     }
     
     
-    public static boolean crearConexionMysql(String pass)
+    public static void crearConexionMysql(String pass) throws Errores
     {
+        if (pass.equalsIgnoreCase(contraseña))
+        {
         
          try
             {
@@ -82,7 +89,7 @@ public class Conexion {
             {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url2 = "jdbc:mysql://192.168.137.130:3306/HOSPITAL?useSSL=false";
+                    String url2 = "jdbc:mysql://localhost:3306/HOSPITAL?useSSL=false";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
@@ -92,64 +99,65 @@ public class Conexion {
                     conMysql = DriverManager.getConnection(url2, nombre, pass);
                     
                     //JOptionPane.showMessageDialog(null, "Conexion MYSQL exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
-                    return true;
 
             }
             catch (SQLException ex) 
             {
+                System.out.println(ex.toString());
                 JOptionPane.showMessageDialog(null, "Error en la conexion con la base de datos" ,"Error", JOptionPane.ERROR_MESSAGE);
-                return false;
             }
             catch (java.lang.Exception ex) 
             {
                 ex.printStackTrace ();
-                return false;
             }
+        }
+        else
+        {
+            throw new Errores(1);
+        }
     }
 
-    public  Statement crearSentencia() throws SQLException
+    public Connection devolverConexion() throws SQLException
     {
-        objeto = conPostgres.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                   
-        return objeto;
+        
+        return conPostgres;
     }
-    
-    
-  
-    public Boolean validarCompañia(String contraseña) throws SQLException
-    {
 
-       String usuario = "Sanitas";
-       ResultSet RsetPost;
-       ResultSet RsetMysQL;
-       PreparedStatement comprobacion;
-       
-       String consulta = "SELECT * FROM COMPAÑIA WHERE COD_COMP= ?";
-       
-       
-       comprobacion = conPostgres.prepareStatement(consulta,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-       
-       comprobacion.setInt(1,Integer.parseInt(contraseña));
-       
-       RsetPost = comprobacion.executeQuery();
-       
-       comprobacion = conMysql.prepareStatement(consulta,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-       
-       comprobacion.setInt(1,Integer.parseInt(contraseña));
-       
-       RsetMysQL = comprobacion.executeQuery();
-       
-       
-       if (RsetPost.next() && RsetMysQL.next())
-       {         
-           System.out.println("Inicio de sesion bien");
-           return true;
-       }
-       else
-       {
-           System.out.println("Inicio de sesion mal");
-           return false;
-       }
+    public Boolean validarCompañia(String contraseña) throws SQLException,Errores
+    {
+        try {
+            
+            String usuario = "Sanitas";
+            ResultSet RsetPost;
+            ResultSet RsetMysQL;
+            PreparedStatement comprobacion;
+            
+            String consulta = "SELECT * FROM COMPAÑIA WHERE COD_COMP= ?";
+            
+            comprobacion = conPostgres.prepareStatement(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            
+            comprobacion.setInt(1, Integer.parseInt(contraseña));
+            
+            RsetPost = comprobacion.executeQuery();
+            
+            comprobacion = conMysql.prepareStatement(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            
+            comprobacion.setInt(1, Integer.parseInt(contraseña));
+            
+            RsetMysQL = comprobacion.executeQuery();
+            
+            if (RsetPost.next() && RsetMysQL.next()) {                
+                System.out.println("Inicio de sesion bien");
+                return true;
+            } else {
+                System.out.println("Inicio de sesion mal");
+                throw new Errores(1);
+            }
+        } catch (NullPointerException | NumberFormatException e) {
+            System.out.println(e.toString());
+            return false;
+        }
+        
     }
 
 
@@ -169,8 +177,4 @@ public class Conexion {
         }
     }
 
-    com.mysql.jdbc.PreparedStatement prepareStatement(String consulta, int TYPE_SCROLL_SENSITIVE, int CONCUR_UPDATABLE) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

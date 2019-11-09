@@ -13,9 +13,7 @@ import Controlador.Conexion;
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form VentanaPrincipal
-     */
+    private String codComp;
     public VentanaPrincipal() {
         initComponents();
     }
@@ -106,7 +104,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonVisualizarMedicosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVisualizarMedicosActionPerformed
-        // TODO add your handling code here:
+        
+        
+        VisualizarMedicosAsociados objeto = new VisualizarMedicosAsociados(codComp);
+        this.setContentPane(objeto);
+        this.pack();
     }//GEN-LAST:event_botonVisualizarMedicosActionPerformed
 
     private void botonAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAcercaDeActionPerformed
@@ -121,6 +123,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pedirContraseña objeto = new pedirContraseña(this, true);
         objeto.setTitle("Iniciar sesión");
         objeto.setVisible(true);
+        
+        codComp = objeto.devolverCodigo();
+        
     }//GEN-LAST:event_botonInicioSesionCompañiaActionPerformed
 
 

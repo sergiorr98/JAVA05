@@ -1,16 +1,106 @@
 
 package Controlador;
 
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Statement;
+import java.util.Date;
 
 
 public class GestionOperaciones {
     
      ResultSet datos;
      
+     Statement sentencia;
+     PreparedStatement sentenciaPreparada;
+     
+    Conexion con = new Conexion();
+
+
+    public GestionOperaciones() {
+        
+         try {
+             sentencia = con.devolverConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+         } catch (SQLException ex) {
+             System.out.println("error");
+         }
+        
+    }
+     
+     
+     
+    
+    public void MostrarMedicos (String consulta) throws SQLException
+    {
+
+        datos = sentencia.executeQuery(consulta);
+        
+    }
+        
+    //Metodo para avanzar
+    public void avanzar() throws SQLException
+    {
+        datos.next();
+    }
+    
+    //Metodo para retroceder
+    public void retroceder() throws SQLException
+    {
+        datos.previous();
+    }
+    
+    //Metodo para acceder al primero
+    public void primero() throws SQLException
+    {
+        datos.beforeFirst();
+        datos.next(); //Esto se hace para colocarnos correctamente en la celda
+    }
+    
+    //Metodo para acceder al ultimo
+    public void ultimo() throws SQLException
+    {
+        datos.afterLast();
+        datos.previous(); //Esto se hace para colocarnos correctamente en la celda
+    }
+    
+    //Metodo que devuelve "TRUE" si es el primero
+    public boolean isFirst() throws SQLException
+    {
+        return datos.isFirst();
+    }
+    
+    //Metodo que devuelve "TRUE" si es el ultimo
+    public boolean isLast() throws SQLException
+    {
+        return datos.isLast();
+    }
+    
+    //Metodo que devuelve una columa pasandole como parametro un indice
+    public String devolverColumna(int i) throws SQLException
+    {
+        return datos.getString(i);
+    }
+    
+    
+    public int updateFecha (Date fecha, String codigoMedico, String consulta) throws SQLException
+    {
+        int filasAct = 0;
+        
+        java.sql.Date fechaN = new java.sql.Date(fecha.getTime());
+        
+        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        
+        sentenciaPreparada.setDate(1,fechaN);
+        sentenciaPreparada.setInt(2,Integer.parseInt(codigoMedico));
+        
+        return filasAct = sentenciaPreparada.executeUpdate();
+
+                
+    }
+    
+     
+  /*   
     public Object select(String consulta) throws SQLException
     {
         Conexion con = new Conexion();
@@ -37,7 +127,8 @@ public class GestionOperaciones {
             return array;
         }
     }
-    
+ */
+    /*   
     public ResultSet selectTablaB (String codigo_medico) throws SQLException
     {
        Conexion con = new Conexion();
@@ -75,5 +166,5 @@ public class GestionOperaciones {
         
         return 1; //Hay que cambiar esto
     }
-    
+ */ 
 }

@@ -5,6 +5,8 @@
  */
 package Controlador;
 
+import java.util.Date;
+
 /**
  *
  * @author Sergio
@@ -12,13 +14,16 @@ package Controlador;
 class ClaseError {
         
     String mensaje="";
-    
+    Date fecha = new Date();
     protected String devolverError(int codigoError)
     {
+       String fechaCompleta=""+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getYear();
+       String hora = ""+fecha.getHours()+":"+fecha.getMinutes();
+        
        switch (codigoError)
        {
            case 1:
-                mensaje = "Error en la base de datos";
+                mensaje = "Error en la base de datos "+fechaCompleta+" "+hora;
                 return mensaje;
            case 2:
                 mensaje = "Error en el DNI";

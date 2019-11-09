@@ -8,6 +8,8 @@ package Vista;
 import Controlador.Conexion;
 import static Controlador.Conexion.crearConexionMysql;
 import static Controlador.Conexion.crearConexionPostgres;
+import Controlador.Errores;
+import Modelo.Principal;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,9 +21,8 @@ import javax.swing.JOptionPane;
  */
 public class pedirContraseña extends javax.swing.JDialog {
 
-    /**
-     * Creates new form pedirContraseña
-     */
+    public static String codigoCompañia="";
+    
     public pedirContraseña(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -123,37 +124,38 @@ public class pedirContraseña extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
-        Conexion obj = new Conexion();
-        
-                
-       boolean banderaPostgres = crearConexionPostgres(jPasswordField1.getText());
-       boolean banderaMysql = crearConexionMysql(jPasswordField1.getText());
-       
-       if (banderaPostgres && banderaMysql)
-       {
-            System.out.println("Conexion inicial correcta");
-            
-            try {
-            obj.validarCompañia(jTextField1.getText());
-            dispose();
-            } catch (SQLException ex) {
-            Logger.getLogger(pedirContraseña.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Usuario o  Contraseña incorrecto" ,"Error", JOptionPane.ERROR_MESSAGE);
-            }
-            
-            dispose();
-       }
-       else
-       {
-            System.out.println("Conexion inicial incorrecta");
-            jTextField1.setText("");
-            jPasswordField1.setText("");
-       }
-            
-        
 
+        try {
+            Conexion obj = new Conexion();
+            crearConexionPostgres(jPasswordField1.getText());
+            crearConexionMysql(jPasswordField1.getText());
+
+            System.out.println("Conexion inicial correcta");
+                
+                try {
+                    obj.validarCompañia(jTextField1.getText());
+                    codigoCompañia = jTextField1.getText();
+                    dispose();
+                } catch (SQLException ex){
+                    Logger.getLogger(pedirContraseña.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Usuario o  Contraseña incorrecto" ,"Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Errores ex) {
+                    vaciarCampos();
+                    ex.queError(1);
+                }
+            } catch (Errores ex) {
+                ex.queError(1);
+                vaciarCampos();
+
+        }
     }//GEN-LAST:event_botonAceptarActionPerformed
 
+    
+    public String devolverCodigo ()
+    {
+        return codigoCompañia;
+    }
+    
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_botonCancelarActionPerformed
@@ -162,6 +164,12 @@ public class pedirContraseña extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
+    protected void vaciarCampos()
+    {
+       jTextField1.setText("");
+       jPasswordField1.setText("");
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAceptar;

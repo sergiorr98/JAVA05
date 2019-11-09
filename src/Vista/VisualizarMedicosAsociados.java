@@ -5,19 +5,89 @@
  */
 package Vista;
 
+import Controlador.Errores;
+import Modelo.ObtenerDatos;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
+
 /**
  *
  * @author alumno
  */
 public class VisualizarMedicosAsociados extends javax.swing.JPanel {
 
-    /**
-     * Creates new form VisualizarMedicosAsociados
-     */
-    public VisualizarMedicosAsociados() {
+    ObtenerDatos objeto = new ObtenerDatos();
+    private String codigoM;
+    
+    public VisualizarMedicosAsociados(String codigoComp) {
+        
+        
         initComponents();
+        try {
+            objeto.mostrarDatosMedicos(codigoComp);
+            
+            codigoM = codigoComp;
+            
+            objeto.avanzar();
+            
+            controlBotones(); //Metodo para controlar botones
+            
+            campoNif.setEditable(false);
+            campoNombre.setEditable(false);
+            campoCodigo.setEditable(false);
+            campoPrecioHora.setEditable(false);
+            
+            establecerImagenCompañia(codigoComp);
+            
+            actualizarDatos();
+            
+        } catch (Errores ex) {
+            ex.queError(2);
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
     }
-
+    
+    private void establecerImagenCompañia(String codigo)
+    {
+        System.out.println(codigo);
+        String url="src/Imagenes/"+codigo+".png";
+        campoLogo.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
+        
+    }
+    
+    
+    //Metodo para controlar botones
+    private void controlBotones()
+    {
+        try {
+            if (objeto.isLast() == false) {
+                botonAdelante.setEnabled(true);
+            } else {
+                botonAdelante.setEnabled(false);
+            }
+            
+            if (objeto.isFirst() == false) {
+                botonAtras.setEnabled(true);
+            } else {
+                botonAtras.setEnabled(false);
+            }
+        } catch (SQLException sQLException) {
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,45 +97,311 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jFileChooser1 = new javax.swing.JFileChooser();
+        botonAtras = new javax.swing.JButton();
+        botonAdelante = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        campoLogo = new javax.swing.JLabel();
+        campoFoto = new javax.swing.JLabel();
+        campoCodigo = new javax.swing.JTextField();
+        campoNif = new javax.swing.JTextField();
+        campoNombre = new javax.swing.JTextField();
+        campoPrecioHora = new javax.swing.JTextField();
+        botonConsultas = new javax.swing.JButton();
+        jDatePicker1 = new org.jdatepicker.JDatePicker();
+        botonEditar = new javax.swing.JButton();
 
-        jLabel1.setText("VISUALIZAR MEDICOS ASOCIADOS");
+        botonAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/atras.png"))); // NOI18N
+        botonAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAtrasActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("jButton1");
+        botonAdelante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/adelante.png"))); // NOI18N
+        botonAdelante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAdelanteActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("jButton2");
+        jLabel2.setText("Codigo");
+
+        jLabel3.setText("NIF");
+
+        jLabel4.setText("Nombre");
+
+        jLabel5.setText("Fecha");
+
+        jLabel6.setText("Precio / hora");
+
+        botonConsultas.setText("CONSULTAS");
+        botonConsultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonConsultasActionPerformed(evt);
+            }
+        });
+
+        jDatePicker1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDatePicker1ActionPerformed(evt);
+            }
+        });
+
+        botonEditar.setText("EDITAR");
+        botonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(79, 79, 79))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(botonAtras)
+                        .addGap(159, 159, 159)
+                        .addComponent(botonConsultas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(campoLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(botonAdelante)
+                        .addGap(47, 47, 47))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(62, 62, 62))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(12, 12, 12)
+                            .addComponent(jLabel5))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(1, 1, 1)))
+                .addGap(90, 90, 90)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoCodigo)
+                    .addComponent(campoPrecioHora)
+                    .addComponent(campoNombre)
+                    .addComponent(campoNif))
+                .addGap(39, 39, 39)
+                .addComponent(campoFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(126, 126, 126)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(campoLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(campoNif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(campoPrecioHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(campoFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(botonAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botonAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonConsultas)
+                        .addGap(35, 35, 35))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void botonConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConsultasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonConsultasActionPerformed
+
+    private void jDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePicker1ActionPerformed
+        GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
+        Date nuevaFecha = fecha.getTime();
+        int actualizados;
+        try {
+            comprobarFecha(fecha);
+            actualizados = objeto.modificarFecha(nuevaFecha,objeto.devolverColumna(1));
+            if (actualizados >= 1)
+           {
+                System.out.println(actualizados);
+                objeto.mostrarDatosMedicos(codigoM);
+                objeto.primero();
+                actualizarDatos();
+                controlBotones();
+                System.out.println("Has actualizado falta joptionpane");
+            }
+        } catch (Errores ex) {
+            System.out.println("error actionperf");
+        } catch (SQLException ex) {
+            Logger.getLogger(VisualizarMedicosAsociados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jDatePicker1ActionPerformed
+
+    private void comprobarFecha (GregorianCalendar fecha) throws Errores
+    {   
+        String f;
+        try {
+         f = objeto.devolverColumna(5);
+            
+        String fechaCaca[] = f.split("-");
+        Date fechaElegida = fecha.getTime();
+        
+           
+        GregorianCalendar fechaMedico = new GregorianCalendar(Integer.parseInt(fechaCaca[0]),(Integer.parseInt(fechaCaca[1]))-1, Integer.parseInt(fechaCaca[2]));
+       
+        Date fechaActual = fechaMedico.getTime();
+
+        
+        if (fechaElegida.before(fechaActual))
+            throw new Errores(2);
+        } catch (Errores ex) {
+            System.out.println("error en vista");
+        }
+
+        
+    }
+        
+    private void botonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAtrasActionPerformed
+        try {     
+            objeto.retroceder(); //Se retrocede
+            
+            controlBotones(); //Metodo para controlar botones
+            
+            actualizarDatos(); //Metodo para actualizar datos
+        } catch (SQLException sQLException) {
+        }
+    }//GEN-LAST:event_botonAtrasActionPerformed
+
+    private void botonAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAdelanteActionPerformed
+        
+        try {
+            objeto.avanzar(); //Avanzamos
+ 
+            controlBotones(); //Metodo para controlar botones
+            
+            actualizarDatos(); //Metodo para actualizar datos
+        } catch (SQLException sQLException) {
+        }
+    }//GEN-LAST:event_botonAdelanteActionPerformed
+
+    private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
+        
+       
+ 
+        FileNameExtensionFilter filter = new FileNameExtensionFilter ("Archivos .png","png");
+        jFileChooser1.setFileFilter(filter);
+        jFileChooser1.addChoosableFileFilter(filter);
+
+        jFileChooser1.setAcceptAllFileFilterUsed(false);
+        
+         int seleccion = jFileChooser1.showDialog(this,"Seleccionar imagen");
+        
+        if (seleccion == JFileChooser.APPROVE_OPTION)
+        {
+            File archivo = jFileChooser1.getSelectedFile();
+            
+            String direccion = archivo.getPath();
+            String destino = "/src/Imagenes/"+codigoM+".png";
+            ImageIcon icon = new ImageIcon (direccion);
+            
+            try {
+                Files.copy(Paths.get(direccion), Paths.get(destino),REPLACE_EXISTING);
+                //adaptarImagen(icon);
+            } catch (IOException ex) {
+           
+            }
+            
+            campoFoto.setIcon(icon);
+        }
+    }//GEN-LAST:event_botonEditarActionPerformed
+    
+    private void cambiarImagen(ImageIcon icon)
+    {   
+            
+    }
+  
+    
+    //Metodo para actualizar datos
+    private void actualizarDatos()
+    {
+        String f;
+        String fecha[];
+        try {
+            //Se llama al metodo pasandole el indice de la columna para que nos devuelva la info
+            campoCodigo.setText("" + objeto.devolverColumna(1));
+            campoNif.setText("" + objeto.devolverColumna(2));
+            campoNombre.setText("" + objeto.devolverColumna(4));
+            f = objeto.devolverColumna(5);
+            fecha = f.split("-");
+            jDatePicker1.getFormattedTextField().setText(fecha[2]+"-"+fecha[1]+"-"+fecha[0]);
+            campoPrecioHora.setText("" + objeto.devolverColumna(6));
+            String url="src/Imagenes/"+objeto.devolverColumna(1)+".png";
+            campoFoto.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
+            
+        } catch (Errores ex) {
+            System.out.println("error actualizar");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton botonAdelante;
+    private javax.swing.JButton botonAtras;
+    private javax.swing.JButton botonConsultas;
+    private javax.swing.JButton botonEditar;
+    private javax.swing.JTextField campoCodigo;
+    private javax.swing.JLabel campoFoto;
+    private javax.swing.JLabel campoLogo;
+    private javax.swing.JTextField campoNif;
+    private javax.swing.JTextField campoNombre;
+    private javax.swing.JTextField campoPrecioHora;
+    private org.jdatepicker.JDatePicker jDatePicker1;
+    private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }
