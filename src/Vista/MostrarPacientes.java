@@ -5,9 +5,12 @@
  */
 package Vista;
 
+import Controlador.Errores;
 import Modelo.ObtenerDatos;
 import Modelo.Paciente;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 /**
@@ -43,7 +46,11 @@ public class MostrarPacientes extends javax.swing.JDialog {
     {
         int contador = 0;
         
-        arrayPaciente = objetoObtenerDatos.mostrarPacientes();
+        try {
+            arrayPaciente = objetoObtenerDatos.mostrarPacientes();
+        } catch (Errores ex) {
+            ex.queError(1);
+        }
     
         while (contador < arrayPaciente.size())
         {

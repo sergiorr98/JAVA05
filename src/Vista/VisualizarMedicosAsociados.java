@@ -8,11 +8,9 @@ package Vista;
 import Controlador.Errores;
 import Modelo.Operacion;
 import Modelo.ObtenerDatos;
-import Vista.VentanaPrincipal;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.sql.SQLException;
@@ -107,7 +105,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
                    modelo.addRow(vector); //Se añade al modelo
                 }
         } catch (Errores ex) {
-            Logger.getLogger(VisualizarMedicosAsociados.class.getName()).log(Level.SEVERE, null, ex);
+            ex.queError(1);
         }
 
          
@@ -149,7 +147,9 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             } else {
                 botonAtras.setEnabled(false);
             }
-        } catch (SQLException sQLException) {
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            
         }
     }
     /**
@@ -337,7 +337,8 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             controlBotones(); //Metodo para controlar botones
             
             actualizarDatos(); //Metodo para actualizar datos
-        } catch (SQLException sQLException) {
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
         }
     }//GEN-LAST:event_botonAtrasActionPerformed
 
@@ -349,7 +350,8 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             controlBotones(); //Metodo para controlar botones
             
             actualizarDatos(); //Metodo para actualizar datos
-        } catch (SQLException sQLException) {
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
         }
     }//GEN-LAST:event_botonAdelanteActionPerformed
 
@@ -397,9 +399,14 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         
         numeroConsultas = numeroConsultas + 1;
         
-        objetoObtenerDatos.nuevaConsulta(codigoMedico, codigoPaciente, tiempoSeleccionado, numeroConsultas);
+        try {
+            objetoObtenerDatos.nuevaConsulta(codigoMedico, codigoPaciente, tiempoSeleccionado, numeroConsultas);
+        } catch (Errores ex) {
+            ex.queError(1);
+        }
         
         actualizarDatos();
+        
         
     }//GEN-LAST:event_botonNuevaConsultaActionPerformed
 
@@ -421,7 +428,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         } catch (Errores ex) {
             ex.queError(2);
         } catch (SQLException ex) {
-            Logger.getLogger(VisualizarMedicosAsociados.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
     }//GEN-LAST:event_jDatePicker1ActionPerformed
     
@@ -476,7 +483,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             rellenarTablaConsulta(codigoMedico);
             
         } catch (Errores ex) {
-            System.out.println("error actualizar");
+            ex.queError(1);
         }
     }
 

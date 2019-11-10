@@ -20,25 +20,16 @@ public class Conexion {
     
     public Statement objeto;
    
-    public static void crearConexionPostgres(String pass) throws Errores
+    public static void crearConexionPostgres(String pass) throws Errores, ClassNotFoundException, SQLException, java.lang.Exception
     {
         if (pass.equalsIgnoreCase(contraseña))
         {
         
-         try
-            {
+
               //Clase que especifica el nombre de los controladores que se van
               //ha utilizar en la carga de la BD en este caso son los de Access
               Class.forName("org.postgresql.Driver");  //loads the driver
               //Class.forName("org.mysql.Driver");
-            }
-            catch(ClassNotFoundException e)
-            {
-                    System.out.println("No encontro driver");
-            }
-
-            try
-            {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
                     String url = "jdbc:postgresql://192.168.137.130:5432/HOSPITAL";
@@ -51,16 +42,6 @@ public class Conexion {
                     conPostgres = DriverManager.getConnection(url, nombre, pass);
                     
                     //JOptionPane.showMessageDialog(null, "Conexion POSTGRES exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
-
-            }
-            catch (SQLException ex) 
-            {
-                JOptionPane.showMessageDialog(null, "Error en la conexion con la base de datos" ,"Error", JOptionPane.ERROR_MESSAGE);
-            }
-            catch (java.lang.Exception ex) 
-            {
-                ex.printStackTrace ();
-            }
         }
         else
         {
@@ -69,24 +50,16 @@ public class Conexion {
     }
     
     
-    public static void crearConexionMysql(String pass) throws Errores
+    public static void crearConexionMysql(String pass) throws Errores, ClassNotFoundException, SQLException, java.lang.Exception
     {
         if (pass.equalsIgnoreCase(contraseña))
         {
         
-         try
-            {
+
               //Clase que especifica el nombre de los controladores que se van
               //ha utilizar en la carga de la BD en este caso son los de Access
               Class.forName("com.mysql.jdbc.Driver");
-            }
-            catch(ClassNotFoundException e)
-            {
-                    System.out.println("No encontro driver");
-            }
 
-            try
-            {
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
                     String url2 = "jdbc:mysql://192.168.137.130:3306/HOSPITAL?useSSL=false";
@@ -99,17 +72,6 @@ public class Conexion {
                     conMysql = DriverManager.getConnection(url2, nombre, pass);
                     
                     //JOptionPane.showMessageDialog(null, "Conexion MYSQL exitosa" ,"Estado de conexión", JOptionPane.PLAIN_MESSAGE);
-
-            }
-            catch (SQLException ex) 
-            {
-                System.out.println(ex.toString());
-                JOptionPane.showMessageDialog(null, "Error en la conexion con la base de datos" ,"Error", JOptionPane.ERROR_MESSAGE);
-            }
-            catch (java.lang.Exception ex) 
-            {
-                ex.printStackTrace ();
-            }
         }
         else
         {

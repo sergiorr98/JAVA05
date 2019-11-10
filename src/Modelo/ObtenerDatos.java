@@ -31,7 +31,7 @@ public class ObtenerDatos {
         }
     }
     
-    public int modificarFecha (Date fechaNueva, String codigo)
+    public int modificarFecha (Date fechaNueva, String codigo) throws Errores
     {
         String consulta = "UPDATE MEDICO SET FECHA_MED = ? WHERE COD_MED = ?";
         int actualizados;
@@ -40,11 +40,11 @@ public class ObtenerDatos {
             return actualizados;
         } catch (SQLException ex) {
                 System.out.println(ex.toString());
-                return 0;
+                throw new Errores(1);
         }
     }
     
-    public int mostrarConsultaMedico (String codigo)
+    public int mostrarConsultaMedico (String codigo) throws Errores
     {
         int codigoMedico = Integer.parseInt(codigo);
         int numeroFilas=0;
@@ -55,12 +55,13 @@ public class ObtenerDatos {
             numeroFilas = gestion.selectConsultaMedico(consulta, codigoMedico);
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Errores(1);
         }
         
         return numeroFilas;
     }
     
-    public ArrayList devolverArrayConsultaMedico()
+    public ArrayList devolverArrayConsultaMedico() throws Errores
     {
         ArrayList <Operacion> array = new ArrayList();
         
@@ -68,24 +69,24 @@ public class ObtenerDatos {
             return array = gestion.listaConsultas();
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            throw new Errores(1);
         }
     }
     
-    public Object devolverObjetoConsultaMedico()
+    public Object devolverObjetoConsultaMedico() throws Errores
     {
         try {
              Operacion objeto = (Operacion) gestion.objetoConsulta();
              return objeto;
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            throw new Errores(1);
         }
         
     }
 
     
-    public ArrayList mostrarPacientes()
+    public ArrayList mostrarPacientes() throws Errores
     {
         String consulta = "SELECT * FROM PACIENTE";
         
@@ -96,11 +97,11 @@ public class ObtenerDatos {
             return array;
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            throw new Errores(1);
         }
     }
     
-    public void nuevaConsulta(String codigoMedico, int codigoPaciente, String tiempoSeleccionado, int numeroConsulta)
+    public void nuevaConsulta(String codigoMedico, int codigoPaciente, String tiempoSeleccionado, int numeroConsulta) throws Errores
     {
         int codigo = Integer.parseInt(codigoMedico);
         int tiempo = Integer.parseInt(tiempoSeleccionado);
@@ -111,6 +112,7 @@ public class ObtenerDatos {
             gestion.insertConsulta(consulta, codigo, codigoPaciente, tiempo, numeroConsulta);
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Errores(1);
         }
     }
     

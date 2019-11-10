@@ -147,6 +147,10 @@ public class pedirContraseña extends javax.swing.JDialog {
                 ex.queError(1);
                 vaciarCampos();
 
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
         }
     }//GEN-LAST:event_botonAceptarActionPerformed
 
