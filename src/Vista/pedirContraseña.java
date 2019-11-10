@@ -136,6 +136,7 @@ public class pedirContraseña extends javax.swing.JDialog {
                     obj.validarCompañia(jTextField1.getText());
                     codigoCompañia = jTextField1.getText();
                     dispose();
+                            
                 } catch (SQLException ex){
                     Logger.getLogger(pedirContraseña.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Usuario o  Contraseña incorrecto" ,"Error", JOptionPane.ERROR_MESSAGE);

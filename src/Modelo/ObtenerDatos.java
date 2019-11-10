@@ -101,6 +101,21 @@ public class ObtenerDatos {
         }
     }
     
+    public void nuevaConsulta(String codigoMedico, int codigoPaciente, String tiempoSeleccionado, int numeroConsulta)
+    {
+        int codigo = Integer.parseInt(codigoMedico);
+        int tiempo = Integer.parseInt(tiempoSeleccionado);
+        
+        String consulta = "INSERT INTO CONSULTA (MED_CON, PAC_CON, COD_CONSULTA, TIEMPO) VALUES(?,?,?,?);";
+        
+        try {
+            gestion.insertConsulta(consulta, codigo, codigoPaciente, tiempo, numeroConsulta);
+        } catch (SQLException ex) {
+            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public void avanzar () throws SQLException
     {
         gestion.avanzar();

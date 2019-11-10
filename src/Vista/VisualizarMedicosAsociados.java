@@ -36,6 +36,8 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
     ObtenerDatos objetoObtenerDatos = new ObtenerDatos();
     private String codigoCompañia;
     private String codigoMedico;
+    private int precioHora=0;
+    int numeroConsultas=0; //Numero de consultas de cada medico
     ArrayList <Consulta> arrayConsulta = new ArrayList();
     
     DefaultTableModel modelo; //Declaracion de los modelos del JTABLE
@@ -73,11 +75,14 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
     
     private void rellenarTablaConsulta(String codigoMedico)
     {
-         int tamaño=0;
+        modelo.setRowCount(0); //Se resetean los modelos
+
         try {
-            tamaño = objetoObtenerDatos.mostrarConsultaMedico(objetoObtenerDatos.devolverColumna(1));
+            numeroConsultas = objetoObtenerDatos.mostrarConsultaMedico(objetoObtenerDatos.devolverColumna(1));
             
-            if (tamaño>1)
+            System.out.println("Numero de pacientes es: "+numeroConsultas);
+            
+            if (numeroConsultas>1)
             {
                 arrayConsulta = objetoObtenerDatos.devolverArrayConsultaMedico();
 
@@ -94,7 +99,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
                jTable1.setModel(modelo); //El modelo se le aplica al JTable
             }
             else
-                if (tamaño == 1)
+                if (numeroConsultas == 1)
                 {
                    Consulta objeto = (Consulta) objetoObtenerDatos.devolverObjetoConsultaMedico();
                    Object vector[]; //Creamos un vector de tipo objeto
@@ -116,7 +121,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         vector[1] = objeto.getPac_con();
         vector[2] = objeto.getCod_consulta();
         vector[3] = objeto.getTiempo();
-        vector[4] = objeto.getPrecio_total();
+        vector[4] = (precioHora * objeto.getTiempo());
         
         return vector;
     }
@@ -129,8 +134,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         campoLogo.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
         
     }
-    
-    
+
     //Metodo para controlar botones
     private void controlBotones()
     {
@@ -314,12 +318,10 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonAdelante, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(botonNuevaConsulta)
-                        .addGap(19, 19, 19))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(botonAdelante, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonNuevaConsulta)
+                    .addComponent(botonAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -409,6 +411,14 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         objeto.setTitle("LISTA DE PACIENTES");
         objeto.setVisible(true);
         
+        int codigoPaciente = objeto.codigoPaciente;
+        String tiempoSeleccionado = objeto.tiempoSeleccionado;
+        
+        numeroConsultas = numeroConsultas + 1;
+        
+        objetoObtenerDatos.nuevaConsulta(codigoMedico, codigoPaciente, tiempoSeleccionado, numeroConsultas);
+        
+        actualizarDatos();
         
     }//GEN-LAST:event_botonNuevaConsultaActionPerformed
     
@@ -432,7 +442,8 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             f = objetoObtenerDatos.devolverColumna(5);
             fecha = f.split("-");
             jDatePicker1.getFormattedTextField().setText(fecha[2]+"-"+fecha[1]+"-"+fecha[0]);
-            campoPrecioHora.setText("" + objetoObtenerDatos.devolverColumna(6));
+            precioHora = Integer.parseInt(objetoObtenerDatos.devolverColumna(6));
+            campoPrecioHora.setText("" + precioHora);
             String url="src/Imagenes/"+objetoObtenerDatos.devolverColumna(1)+".png";
             campoFoto.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
             rellenarTablaConsulta(codigoMedico);

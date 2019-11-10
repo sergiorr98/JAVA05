@@ -16,6 +16,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private String codComp;
     public VentanaPrincipal() {
         initComponents();
+        
+        desactivarBotones();
+        botonDesconectar.setEnabled(false);
     }
 
     /**
@@ -28,21 +31,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         botonInicioSesionCompañia = new javax.swing.JMenuItem();
         botonVisualizarMedicos = new javax.swing.JMenuItem();
         botonAltaMedico = new javax.swing.JMenuItem();
+        botonDesconectar = new javax.swing.JMenuItem();
         botonAcercaDe = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("BASE DE DATOS");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("HOSPITAL");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel1.setText("MENU PRINCIPAL");
 
         jMenu1.setText("Menú");
 
@@ -65,6 +65,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonAltaMedico.setText("Alta Medico");
         jMenu1.add(botonAltaMedico);
 
+        botonDesconectar.setText("Desconectar");
+        botonDesconectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDesconectarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(botonDesconectar);
+
         botonAcercaDe.setText("Acerca de");
         botonAcercaDe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,23 +89,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(151, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(166, 166, 166))
             .addGroup(layout.createSequentialGroup()
-                .addGap(125, 125, 125)
+                .addGap(71, 71, 71)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
+                .addGap(114, 114, 114)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(140, 140, 140))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
 
         pack();
@@ -126,16 +128,53 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         codComp = objeto.devolverCodigo();
         
+        activarBotones();
+        
+        botonInicioSesionCompañia.setEnabled(false);
+        botonDesconectar.setEnabled(true);
+        
+        BienvenidaCompañia obj = new BienvenidaCompañia (codComp);
+        this.setContentPane(obj);
+        this.pack();
+        
     }//GEN-LAST:event_botonInicioSesionCompañiaActionPerformed
 
+    private void botonDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDesconectarActionPerformed
+        panelPrincipal obj = new panelPrincipal ();
+        this.setContentPane(obj);
+        this.pack();
+        
+        desactivarBotones();
+        botonInicioSesionCompañia.setEnabled(true);
+        botonDesconectar.setEnabled(false);
+        
+    }//GEN-LAST:event_botonDesconectarActionPerformed
+
+    private void desactivarBotones()
+    {
+        botonAcercaDe.setEnabled(false);
+        botonVisualizarMedicos.setEnabled(false);
+        botonAltaMedico.setEnabled(false);
+        botonAcercaDe.setEnabled(false);
+
+    }
+    
+    private void activarBotones()
+    {
+        botonAcercaDe.setEnabled(true);
+        botonVisualizarMedicos.setEnabled(true);
+        botonAltaMedico.setEnabled(true);
+        botonAcercaDe.setEnabled(true);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem botonAcercaDe;
     private javax.swing.JMenuItem botonAltaMedico;
+    private javax.swing.JMenuItem botonDesconectar;
     private javax.swing.JMenuItem botonInicioSesionCompañia;
     private javax.swing.JMenuItem botonVisualizarMedicos;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables

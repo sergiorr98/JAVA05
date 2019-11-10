@@ -163,4 +163,18 @@ public class GestionOperaciones {
         
         return array;
     }
+    
+    
+    public void insertConsulta (String consulta, int codigoMedico, int codigoPaciente, int tiempoConsulta, int numeroConsulta) throws SQLException
+    {
+        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        
+        sentenciaPreparada.setInt(1,codigoMedico);
+        sentenciaPreparada.setInt(2,codigoPaciente);
+        sentenciaPreparada.setInt(3,numeroConsulta);
+        sentenciaPreparada.setInt(4,tiempoConsulta);
+        
+        sentenciaPreparada.execute();
+        
+    }
 }

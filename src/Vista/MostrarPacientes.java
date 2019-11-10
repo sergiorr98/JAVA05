@@ -19,7 +19,8 @@ public class MostrarPacientes extends javax.swing.JDialog {
     DefaultListModel modeloList; //Se declara el modeloList
     ObtenerDatos objetoObtenerDatos = new ObtenerDatos();
     ArrayList <Paciente> arrayPaciente = new ArrayList();
-    String codigoMedico;
+    String codigoMedico, tiempoSeleccionado; //Variables necesarias para guardar la info para crear la consulta
+    int codigoPaciente;
         
     public MostrarPacientes(java.awt.Frame parent, boolean modal, String codigo) {
         super(parent, modal);
@@ -168,17 +169,17 @@ public class MostrarPacientes extends javax.swing.JDialog {
         
         Paciente objeto = arrayPaciente.get(indice);
         
-        System.out.println("Ha seleccionado el paciente"+objeto.getCod_pac());
-       
+        codigoPaciente = objeto.getCod_pac();
+        
         campoPaciente.setText(""+objeto.getCod_pac());
+        
     }//GEN-LAST:event_jList1MouseClicked
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         
-        campoTiempo.getText();
+        tiempoSeleccionado=campoTiempo.getText();
         dispose();
     }//GEN-LAST:event_botonAceptarActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAceptar;
