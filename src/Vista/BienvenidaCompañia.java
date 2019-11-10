@@ -65,7 +65,6 @@ public class BienvenidaCompañia extends javax.swing.JPanel {
     
     private void establecerImagenCompañia(String codigo)
     {
-        System.out.println(codigo);
         String url="src/Imagenes/"+codigo+".png";
         campoLogo.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
         

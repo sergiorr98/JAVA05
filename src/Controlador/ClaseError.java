@@ -26,10 +26,10 @@ class ClaseError {
                 mensaje = "Error en la base de datos "+fechaCompleta+" "+hora;
                 return mensaje;
            case 2:
-                mensaje = "Error en el DNI";
+                mensaje = "Error en la fecha"+fechaCompleta+" "+hora;;
                 return mensaje;
            case 3:
-                mensaje = "Error en la fecha";
+                mensaje = "Error en el DNI"+fechaCompleta+" "+hora;;
                 return mensaje;
                      
        }

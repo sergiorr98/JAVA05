@@ -20,7 +20,6 @@ public class Errores extends Exception {
         String mensaje=error.devolverError(codigoError);
         
         System.out.println(mensaje);
-        
     }
     
     

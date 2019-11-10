@@ -6,7 +6,7 @@
 package Vista;
 
 import Controlador.Errores;
-import Modelo.Consulta;
+import Modelo.Operacion;
 import Modelo.ObtenerDatos;
 import Vista.VentanaPrincipal;
 import java.io.File;
@@ -37,8 +37,9 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
     private String codigoCompañia;
     private String codigoMedico;
     private int precioHora=0;
+    private Boolean fechabien = false;
     int numeroConsultas=0; //Numero de consultas de cada medico
-    ArrayList <Consulta> arrayConsulta = new ArrayList();
+    ArrayList <Operacion> arrayConsulta = new ArrayList();
     
     DefaultTableModel modelo; //Declaracion de los modelos del JTABLE
     
@@ -80,7 +81,6 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         try {
             numeroConsultas = objetoObtenerDatos.mostrarConsultaMedico(objetoObtenerDatos.devolverColumna(1));
             
-            System.out.println("Numero de pacientes es: "+numeroConsultas);
             
             if (numeroConsultas>1)
             {
@@ -101,7 +101,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             else
                 if (numeroConsultas == 1)
                 {
-                   Consulta objeto = (Consulta) objetoObtenerDatos.devolverObjetoConsultaMedico();
+                   Operacion objeto = (Operacion) objetoObtenerDatos.devolverObjetoConsultaMedico();
                    Object vector[]; //Creamos un vector de tipo objeto
                    vector = obtenerDatos(objeto); //El vector se rellena
                    modelo.addRow(vector); //Se añade al modelo
@@ -113,7 +113,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
          
     }
     
-    private Object[] obtenerDatos(Consulta objeto) //Objeto de tipo Supermercado
+    private Object[] obtenerDatos(Operacion objeto) //Objeto de tipo Supermercado
     {
         Object vector[] = new Object[5]; //Creamos un vector del mismo numero de campos que la tabla
      
@@ -129,7 +129,6 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
 
     private void establecerImagenCompañia(String codigo)
     {
-        System.out.println(codigo);
         String url="src/Imagenes/"+codigo+".png";
         campoLogo.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
         
@@ -230,6 +229,12 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             }
         });
 
+        jDatePicker1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDatePicker1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -325,30 +330,6 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comprobarFecha (GregorianCalendar fecha) throws Errores
-    {   
-        String f;
-        try {
-         f = objetoObtenerDatos.devolverColumna(5);
-            
-        String fechaCaca[] = f.split("-");
-        Date fechaElegida = fecha.getTime();
-        
-           
-        GregorianCalendar fechaMedico = new GregorianCalendar(Integer.parseInt(fechaCaca[0]),(Integer.parseInt(fechaCaca[1]))-1, Integer.parseInt(fechaCaca[2]));
-       
-        Date fechaActual = fechaMedico.getTime();
-
-        
-        if (fechaElegida.before(fechaActual))
-            throw new Errores(2);
-        } catch (Errores ex) {
-            System.out.println("error en vista");
-        }
-
-        
-    }
-        
     private void botonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAtrasActionPerformed
         try {     
             objetoObtenerDatos.retroceder(); //Se retrocede
@@ -421,6 +402,52 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         actualizarDatos();
         
     }//GEN-LAST:event_botonNuevaConsultaActionPerformed
+
+    private void jDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePicker1ActionPerformed
+         GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
+        Date nuevaFecha = fecha.getTime();
+        int actualizados;
+        try {
+            comprobarFecha(fecha);
+            actualizados = objetoObtenerDatos.modificarFecha(nuevaFecha,objetoObtenerDatos.devolverColumna(1));
+            if (actualizados >= 1)
+           {
+                objetoObtenerDatos.mostrarDatosMedicos(codigoCompañia);
+                objetoObtenerDatos.primero();
+                actualizarDatos();
+                controlBotones();
+                JOptionPane.showMessageDialog(null, "Se ha actualizado correctamente la fecha" ,"Informacion de actualizacion", JOptionPane.PLAIN_MESSAGE);
+            }
+        } catch (Errores ex) {
+            ex.queError(2);
+        } catch (SQLException ex) {
+            Logger.getLogger(VisualizarMedicosAsociados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jDatePicker1ActionPerformed
+    
+    
+    private void comprobarFecha (GregorianCalendar fecha) throws Errores
+    {   
+        String f;
+
+         f = objetoObtenerDatos.devolverColumna(5);
+            
+        String fechaDevuelta[] = f.split("-");
+        Date fechaElegida = fecha.getTime();
+        
+           
+        GregorianCalendar fechaMedico = new GregorianCalendar(Integer.parseInt(fechaDevuelta[0]),(Integer.parseInt(fechaDevuelta[1]))-1, Integer.parseInt(fechaDevuelta[2]));
+       
+        Date fechaActual = fechaMedico.getTime();
+
+        
+        if (fechaElegida.before(fechaActual))
+            throw new Errores(2);
+
+    }
+        
+    
+    
     
     private void cambiarImagen(ImageIcon icon)
     {   

@@ -57,13 +57,12 @@ public class ObtenerDatos {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        System.out.println("El numero de filas del medico "+codigo+" es "+numeroFilas);
         return numeroFilas;
     }
     
     public ArrayList devolverArrayConsultaMedico()
     {
-        ArrayList <Consulta> array = new ArrayList();
+        ArrayList <Operacion> array = new ArrayList();
         
         try {
             return array = gestion.listaConsultas();
@@ -76,7 +75,7 @@ public class ObtenerDatos {
     public Object devolverObjetoConsultaMedico()
     {
         try {
-             Consulta objeto = (Consulta) gestion.objetoConsulta();
+             Operacion objeto = (Operacion) gestion.objetoConsulta();
              return objeto;
         } catch (SQLException ex) {
             Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);

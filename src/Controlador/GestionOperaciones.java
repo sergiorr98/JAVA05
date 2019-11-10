@@ -1,7 +1,7 @@
 
 package Controlador;
 
-import Modelo.Consulta;
+import Modelo.Operacion;
 import Modelo.Paciente;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,17 +121,16 @@ public class GestionOperaciones {
     
     public ArrayList listaConsultas() throws SQLException
     {
-        ArrayList <Consulta> array = new ArrayList();
+        ArrayList <Operacion> array = new ArrayList();
         
         int cont=0;
-        Consulta obj = new Consulta(datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
+        Operacion obj = new Operacion(datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
         array.add(obj);
         while(datosConsultasMedicas.next()!=false)
         {
-            obj = new Consulta(datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
+            obj = new Operacion(datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
             array.add(obj);
             cont++;
-            System.out.println("Cuantos"+cont);
         }
         
         return array;
@@ -139,7 +138,7 @@ public class GestionOperaciones {
     
     public Object objetoConsulta() throws SQLException
     {
-        Consulta objeto = new Consulta (datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
+        Operacion objeto = new Operacion (datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
         return objeto;
     }
     
