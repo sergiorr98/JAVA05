@@ -63,6 +63,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu1.add(botonVisualizarMedicos);
 
         botonAltaMedico.setText("Alta Medico");
+        botonAltaMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAltaMedicoActionPerformed(evt);
+            }
+        });
         jMenu1.add(botonAltaMedico);
 
         botonDesconectar.setText("Desconectar");
@@ -149,6 +154,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonDesconectar.setEnabled(false);
         
     }//GEN-LAST:event_botonDesconectarActionPerformed
+
+    private void botonAltaMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAltaMedicoActionPerformed
+       AltaMedico objeto = new AltaMedico(codComp);
+       this.setContentPane(objeto);
+       this.pack();
+    }//GEN-LAST:event_botonAltaMedicoActionPerformed
 
     private void desactivarBotones()
     {

@@ -176,4 +176,21 @@ public class GestionOperaciones {
         sentenciaPreparada.execute();
         
     }
+    
+    public void insertMedico (String consulta, int codigoMedico, String nombreMedico, int codigoCompañia, int precioHora, String nifMedico, Date fechaElegida) throws SQLException
+    {
+        //INSERT INTO MEDICO VALUES (65,'54179084P',10,'Alvaro','2019/10/12',40);
+        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        
+        java.sql.Date fechaN = new java.sql.Date(fechaElegida.getTime());
+        
+        sentenciaPreparada.setInt(1, codigoMedico);
+        sentenciaPreparada.setString(2, nifMedico);
+        sentenciaPreparada.setInt(3, codigoCompañia);
+        sentenciaPreparada.setString(4,nombreMedico);
+        sentenciaPreparada.setDate(5,fechaN);
+        sentenciaPreparada.setInt(6, precioHora);
+        
+        sentenciaPreparada.execute();
+    }
 }

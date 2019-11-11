@@ -117,6 +117,24 @@ public class ObtenerDatos {
     }
     
     
+    public void nuevoMedico(String codigoMedico, String nombreMedico, String codigoCompañia, String precioHora, String nifMedico, Date fechaElegida) throws Errores
+    {
+        int codigoM = Integer.parseInt(codigoMedico);
+        int codigoComp = Integer.parseInt(codigoCompañia);
+        int precioH = Integer.parseInt(precioHora);
+        
+        String consulta = "INSERT INTO MEDICO VALUES (?,?,?,?, ?,?);";
+        
+        try {
+            gestion.insertMedico(consulta, codigoM, nombreMedico, codigoComp, precioH, nifMedico, fechaElegida);
+        } catch (SQLException ex) {
+            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Errores(1);
+        }
+ 
+    }
+    
+    
     public void avanzar () throws SQLException
     {
         gestion.avanzar();

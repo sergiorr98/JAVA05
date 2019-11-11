@@ -417,14 +417,14 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         try {
             comprobarFecha(fecha);
             actualizados = objetoObtenerDatos.modificarFecha(nuevaFecha,objetoObtenerDatos.devolverColumna(1));
-            if (actualizados >= 1)
+           if (actualizados >= 1)
            {
                 objetoObtenerDatos.mostrarDatosMedicos(codigoCompañia);
                 objetoObtenerDatos.primero();
                 actualizarDatos();
                 controlBotones();
-                JOptionPane.showMessageDialog(null, "Se ha actualizado correctamente la fecha" ,"Informacion de actualizacion", JOptionPane.PLAIN_MESSAGE);
-            }
+                JOptionPane.showMessageDialog(null, "Se han actualizado "+actualizados+" fila(s)" ,"Informacion de actualizacion", JOptionPane.PLAIN_MESSAGE);
+           }
         } catch (Errores ex) {
             ex.queError(2);
         } catch (SQLException ex) {
