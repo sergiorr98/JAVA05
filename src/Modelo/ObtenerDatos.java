@@ -14,23 +14,26 @@ public class ObtenerDatos {
        
     GestionOperaciones gestion;
 
+    //Se crea el objeto de la clase de GestionOperaciones que es donde le pasaremos la info para hacer las consultas
     public ObtenerDatos() {
          gestion = new GestionOperaciones();
     }
     
+    //Metodo que se le pasa el codigo de medico, crea la consulta  y se le pasa a otro metodo de la clase GestionOperaciones
     public void mostrarDatosMedicos (String codigo) throws Errores
     {
         int codigoCompañia = Integer.parseInt(codigo);
-        String consulta = "SELECT * FROM MEDICO WHERE COMP_MED = "+codigoCompañia+";";
+        String consulta = "SELECT * FROM MEDICO WHERE COMP_MED = ? ;";
         
         try {
-            gestion.MostrarMedicos(consulta);
+            gestion.MostrarMedicos(consulta, codigoCompañia);
         } catch (SQLException ex) {
             System.out.println(ex.toString());    
             throw new Errores(1);
         }
     }
     
+    //Metodo para modificar la fecha
     public int modificarFecha (Date fechaNueva, String codigo) throws Errores
     {
         String consulta = "UPDATE MEDICO SET FECHA_MED = ? WHERE COD_MED = ?";
@@ -43,7 +46,7 @@ public class ObtenerDatos {
                 throw new Errores(1);
         }
     }
-    
+    //Metodo para mostrar las consultas de un medico que se pasa por parametro
     public int mostrarConsultaMedico (String codigo) throws Errores
     {
         int codigoMedico = Integer.parseInt(codigo);
@@ -61,6 +64,7 @@ public class ObtenerDatos {
         return numeroFilas;
     }
     
+    //Metodo que devuelve array de las consultas de los medicos
     public ArrayList devolverArrayConsultaMedico() throws Errores
     {
         ArrayList <Operacion> array = new ArrayList();
@@ -73,6 +77,7 @@ public class ObtenerDatos {
         }
     }
     
+    //Metodo que devuelve objeto de la consulta del medico
     public Object devolverObjetoConsultaMedico() throws Errores
     {
         try {
@@ -85,7 +90,7 @@ public class ObtenerDatos {
         
     }
 
-    
+    //Metodo que devuelve un array de los pacientes
     public ArrayList mostrarPacientes() throws Errores
     {
         String consulta = "SELECT * FROM PACIENTE";
@@ -101,6 +106,7 @@ public class ObtenerDatos {
         }
     }
     
+    //Metodo que crea una nueva consulta
     public void nuevaConsulta(String codigoMedico, int codigoPaciente, String tiempoSeleccionado, int numeroConsulta) throws Errores
     {
         int codigo = Integer.parseInt(codigoMedico);
@@ -116,7 +122,7 @@ public class ObtenerDatos {
         }
     }
     
-    
+    //Metodo que crea un nuevo medico
     public void nuevoMedico(String codigoMedico, String nombreMedico, String codigoCompañia, String precioHora, String nifMedico, Date fechaElegida) throws Errores
     {
         int codigoM = Integer.parseInt(codigoMedico);
@@ -134,7 +140,7 @@ public class ObtenerDatos {
  
     }
     
-    
+    //Metodo para avanzar
     public void avanzar () throws Errores 
     {
         try {
@@ -145,7 +151,7 @@ public class ObtenerDatos {
         }
     }
     
-    
+    //Metodo para retroceder
     public void retroceder () throws Errores 
     {
         try {
@@ -156,7 +162,7 @@ public class ObtenerDatos {
         }
     }
     
-    
+    //Metodo para ir al primero
     public void primero () throws Errores
     {
         try {
@@ -167,6 +173,7 @@ public class ObtenerDatos {
         }
     }
     
+//Metodo para ir al ultimo
     public void ultimo() throws Errores 
     {
         try {
@@ -177,6 +184,7 @@ public class ObtenerDatos {
         }
     }
     
+    //Metodo que dice si estamos en el primero
     public boolean isFirst() throws Errores
     {
         Boolean bandera = false;
@@ -191,6 +199,8 @@ public class ObtenerDatos {
 
     }
     
+    
+    //Metodo que dice si estamos en el ultimo
     public boolean isLast() throws Errores
     {   Boolean bandera = false;
         try {
@@ -205,7 +215,6 @@ public class ObtenerDatos {
     //Metodo que devuelve una columa pasandole como parametro un indice
     public String devolverColumna(int i) throws Errores
     {
-        
         String palabra;
         try {
             palabra = gestion.devolverColumna(i);

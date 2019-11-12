@@ -82,6 +82,12 @@ public class AltaMedico extends javax.swing.JPanel {
 
         jLabel6.setText("PRECIO/HORA");
 
+        campoCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoCodigoActionPerformed(evt);
+            }
+        });
+
         jDatePicker1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jDatePicker1ActionPerformed(evt);
@@ -181,10 +187,10 @@ public class AltaMedico extends javax.swing.JPanel {
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         boolean campoBlanco, codigoErroneo;
-        if (campoBlanco = comprobarCampos())
+        if (campoBlanco = comprobarCampos()) //Primero se comprueba que no haya campos en blanco
             JOptionPane.showMessageDialog(null, "Rellene todos los campos" ,"Campos vacios", JOptionPane.ERROR_MESSAGE);
         else
-            if (codigoErroneo = comprobarCodigoMedico())
+            if (codigoErroneo = comprobarCodigoMedico()) //Se comprueba si el codigo es correcto
             {
                 JOptionPane.showMessageDialog(null, "El codigo de medico tiene que estar entre 70 y 100" ,"Error codigo Medico", JOptionPane.ERROR_MESSAGE);
                 campoCodigo.setText("");
@@ -194,19 +200,20 @@ public class AltaMedico extends javax.swing.JPanel {
                recogerInformacion(); //Recogemos la informacion de los campos (la fecha se recoge con el actionPerformed del jDatePicker)
                boolean banderaDNI;
                 try {
-                    banderaDNI = comprobarDNI();
-                    objetoObtenerDatos.nuevoMedico(codigo, nombre, codigoCompañia, precioHora, Nif, fechaElegida);
-                    cambiarPanel();
+                    banderaDNI = comprobarDNI(); //Se comprueba el dni
+                    objetoObtenerDatos.nuevoMedico(codigo, nombre, codigoCompañia, precioHora, Nif, fechaElegida); //Se llama al metodo de Nuevo Medico
+                    cambiarPanel();//cambiamos panel
                 } catch (Errores ex) {
-                    ex.queError(3);
+                    ex.queError(3); //Lanzamos error de DNI personalizado
                     campoNif.setText("");
                     JOptionPane.showMessageDialog(null, "Error en el DNI" ,"ERROR DNI", JOptionPane.ERROR_MESSAGE);
                     
                 }
-                establecerImagenPorDefecto();
+                establecerImagenPorDefecto(); //Establecemos imagen por defecto
             }
     }//GEN-LAST:event_botonAceptarActionPerformed
 
+    //Metodo para comprobar el codigo de medico
     private Boolean comprobarCodigoMedico()
     {
         boolean bandera = false;
@@ -218,6 +225,8 @@ public class AltaMedico extends javax.swing.JPanel {
         return bandera;
     }
     
+    
+    //Metodo para establecer imagen por defecto
     private void establecerImagenPorDefecto()
     {
             String direccion = "src/Imagenes/defecto.png";
@@ -231,6 +240,7 @@ public class AltaMedico extends javax.swing.JPanel {
     }
     
     
+    //Se recoge la imagen con el jDatePicker
     private void jDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePicker1ActionPerformed
         GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
         fechaElegida = fecha.getTime();
@@ -240,13 +250,18 @@ public class AltaMedico extends javax.swing.JPanel {
         cambiarPanel();
     }//GEN-LAST:event_botonCancelarActionPerformed
 
-    
+    private void campoCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoCodigoActionPerformed
+
+    //Metodo para cambiar de panel
     private void cambiarPanel()
     {
         BienvenidaCompañia obj = new BienvenidaCompañia(codigoCompañia);
         
         Principal.cambioDePanel(obj);
     }
+    //Metodo para comprobar el DNI
     private Boolean comprobarDNI() throws Errores
     {
         Boolean bien = false;
@@ -258,10 +273,9 @@ public class AltaMedico extends javax.swing.JPanel {
         else
             throw new Errores(3);
             
-        
         return bien;
     }
-    
+  //Metodo para recoger la informacion  
     private void recogerInformacion()
     {
         nombre = campoNombre.getText();
@@ -269,6 +283,7 @@ public class AltaMedico extends javax.swing.JPanel {
         Nif = campoNif.getText();
         precioHora = campoPrecioHora.getText();
     }
+   //Metodo para comprobar los campos
     private Boolean comprobarCampos()
     {
         boolean bandera = false;
@@ -279,8 +294,7 @@ public class AltaMedico extends javax.swing.JPanel {
         
         return bandera;
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAceptar;
