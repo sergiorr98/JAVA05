@@ -8,6 +8,7 @@ package Vista;
 import Controlador.Errores;
 import Modelo.Operacion;
 import Modelo.ObtenerDatos;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,9 +66,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             actualizarDatos();
   
         } catch (Errores ex) {
-            ex.queError(2);
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
+            ex.queError(1);
         }
     }
     
@@ -141,15 +140,17 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             } else {
                 botonAdelante.setEnabled(false);
             }
-            
+        } catch (Errores ex) {
+           ex.queError(1);
+        }
+        try {
             if (objetoObtenerDatos.isFirst() == false) {
                 botonAtras.setEnabled(true);
             } else {
                 botonAtras.setEnabled(false);
             }
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
-            
+        } catch (Errores ex) {
+            ex.queError(1);
         }
     }
     /**
@@ -331,28 +332,24 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAtrasActionPerformed
-        try {     
+        try {
             objetoObtenerDatos.retroceder(); //Se retrocede
-            
-            controlBotones(); //Metodo para controlar botones
-            
-            actualizarDatos(); //Metodo para actualizar datos
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
+        } catch (Errores ex) {
+            ex.queError(1);
         }
+        controlBotones(); //Metodo para controlar botones
+        actualizarDatos(); //Metodo para actualizar datos
     }//GEN-LAST:event_botonAtrasActionPerformed
 
     private void botonAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAdelanteActionPerformed
         
         try {
             objetoObtenerDatos.avanzar(); //Avanzamos
- 
-            controlBotones(); //Metodo para controlar botones
-            
-            actualizarDatos(); //Metodo para actualizar datos
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
+        } catch (Errores ex) {
+            ex.queError(1);
         }
+        controlBotones(); //Metodo para controlar botones
+        actualizarDatos(); //Metodo para actualizar datos
     }//GEN-LAST:event_botonAdelanteActionPerformed
 
     private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
@@ -372,8 +369,10 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             File archivo = jFileChooser1.getSelectedFile();
             
             String direccion = archivo.getPath();
-            String destino = "/src/Imagenes/"+codigoCompañia+".png";
+            String destino = "src/Imagenes/"+codigoMedico+".png";
+            
             ImageIcon icon = new ImageIcon (direccion);
+            icon = redimensionarImagen(icon);
             
             try {
                 Files.copy(Paths.get(direccion), Paths.get(destino),REPLACE_EXISTING);
@@ -381,11 +380,19 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             } catch (IOException ex) {
            
             }
-            
             campoFoto.setIcon(icon);
         }
     }//GEN-LAST:event_botonEditarActionPerformed
 
+    private ImageIcon redimensionarImagen (ImageIcon icon)
+    {
+        Image imagen = icon.getImage();
+        
+        imagen = imagen.getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+        
+        return new ImageIcon(imagen);
+    }
+    
     private void botonNuevaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevaConsultaActionPerformed
 
         VentanaPrincipal obj = new VentanaPrincipal();
@@ -427,8 +434,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
            }
         } catch (Errores ex) {
             ex.queError(2);
-        } catch (SQLException ex) {
-            System.out.println(ex.toString());
+            JOptionPane.showMessageDialog(null, "Error en la fecha" ,"Error fecha", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jDatePicker1ActionPerformed
     
@@ -452,16 +458,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             throw new Errores(2);
 
     }
-        
-    
-    
-    
-    private void cambiarImagen(ImageIcon icon)
-    {   
-            
-    }
-  
-    
+
     //Metodo para actualizar datos
     private void actualizarDatos()
     {
@@ -479,7 +476,9 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             precioHora = Integer.parseInt(objetoObtenerDatos.devolverColumna(6));
             campoPrecioHora.setText("" + precioHora);
             String url="src/Imagenes/"+objetoObtenerDatos.devolverColumna(1)+".png";
-            campoFoto.setIcon(new ImageIcon(url)); //La imagen se escoge segun el codigo de director
+            ImageIcon icon = new ImageIcon(url);
+            icon = redimensionarImagen(icon);
+            campoFoto.setIcon(icon); //La imagen se escoge segun el codigo de director
             rellenarTablaConsulta(codigoMedico);
             
         } catch (Errores ex) {

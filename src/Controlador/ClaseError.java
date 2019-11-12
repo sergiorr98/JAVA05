@@ -5,7 +5,14 @@
  */
 package Controlador;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,14 +33,48 @@ class ClaseError {
                 mensaje = "Error en la base de datos "+fechaCompleta+" "+hora;
                 return mensaje;
            case 2:
-                mensaje = "Error en la fecha"+fechaCompleta+" "+hora;;
+                mensaje = "Error en la fecha "+fechaCompleta+" "+hora;;
                 return mensaje;
            case 3:
-                mensaje = "Error en el DNI"+fechaCompleta+" "+hora;;
+                mensaje = "Error en el DNI "+fechaCompleta+" "+hora;;
                 return mensaje;
                      
        }
        mensaje = "Error inesperado";
        return mensaje;
     }
+    
+    protected void escribirFicheroLog (int codigoError)
+    {
+
+            try {
+                FileWriter archivo = new FileWriter(new File("log.txt"),true);
+                        
+                Date fecha = new Date();
+                
+                String fechaCompleta=""+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getYear();
+                String hora = ""+fecha.getHours()+":"+fecha.getMinutes();
+                
+                switch (codigoError)
+                {
+                    case 1:
+                        mensaje = "Error en la base de datos "+fechaCompleta+" "+hora;
+                        break;
+                    case 2:
+                        mensaje = "Error en la fecha "+fechaCompleta+" "+hora;
+                        break;
+                    case 3:
+                        mensaje = "Error en el DNI "+fechaCompleta+" "+hora;
+                        break;
+                }
+                
+                archivo.write(mensaje);
+                archivo.write("\n");
+                archivo.close();
+
+            } catch (IOException ex) {
+                System.out.println(ex.toString());
+            }
+    }
+
 }

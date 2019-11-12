@@ -54,7 +54,7 @@ public class ObtenerDatos {
         try {
             numeroFilas = gestion.selectConsultaMedico(consulta, codigoMedico);
         } catch (SQLException ex) {
-            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
         
@@ -68,7 +68,7 @@ public class ObtenerDatos {
         try {
             return array = gestion.listaConsultas();
         } catch (SQLException ex) {
-            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
     }
@@ -79,7 +79,7 @@ public class ObtenerDatos {
              Operacion objeto = (Operacion) gestion.objetoConsulta();
              return objeto;
         } catch (SQLException ex) {
-            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
         
@@ -96,7 +96,7 @@ public class ObtenerDatos {
             array = gestion.selectPaciente(consulta);
             return array;
         } catch (SQLException ex) {
-            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
     }
@@ -111,7 +111,7 @@ public class ObtenerDatos {
         try {
             gestion.insertConsulta(consulta, codigo, codigoPaciente, tiempo, numeroConsulta);
         } catch (SQLException ex) {
-            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
     }
@@ -128,46 +128,78 @@ public class ObtenerDatos {
         try {
             gestion.insertMedico(consulta, codigoM, nombreMedico, codigoComp, precioH, nifMedico, fechaElegida);
         } catch (SQLException ex) {
-            Logger.getLogger(ObtenerDatos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
  
     }
     
     
-    public void avanzar () throws SQLException
+    public void avanzar () throws Errores 
     {
-        gestion.avanzar();
+        try {
+            gestion.avanzar();
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            throw new Errores(1);
+        }
     }
     
     
-    public void retroceder () throws SQLException
+    public void retroceder () throws Errores 
     {
-        gestion.retroceder();
+        try {
+            gestion.retroceder();
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());      
+            throw new Errores(1);
+        }
     }
     
     
-    public void primero () throws SQLException
+    public void primero () throws Errores
     {
-        gestion.primero();
+        try {
+            gestion.primero();
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            throw new Errores(1);
+        }
     }
     
-    public void ultimo() throws SQLException
+    public void ultimo() throws Errores 
     {
-        gestion.ultimo();
+        try {
+            gestion.ultimo();
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            throw new Errores(1);
+        }
     }
     
-    public boolean isFirst() throws SQLException
+    public boolean isFirst() throws Errores
     {
-        Boolean bandera;
-        bandera = gestion.isFirst();
-        return bandera;
+        Boolean bandera = false;
+        try {
+
+            bandera = gestion.isFirst();
+            return bandera;
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            throw new Errores(1);
+        }
+
     }
     
-    public boolean isLast() throws SQLException
-    {   Boolean bandera;
-        bandera =gestion.isLast();
-        return bandera;
+    public boolean isLast() throws Errores
+    {   Boolean bandera = false;
+        try {
+            bandera =gestion.isLast();
+            return bandera;
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            throw new Errores(1);
+        }
     }
     
     //Metodo que devuelve una columa pasandole como parametro un indice
@@ -179,6 +211,7 @@ public class ObtenerDatos {
             palabra = gestion.devolverColumna(i);
             return palabra;
         } catch (SQLException ex) {
+            System.out.println(ex.toString());
             throw new Errores(1);
         }
     }

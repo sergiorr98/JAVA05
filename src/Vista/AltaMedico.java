@@ -9,6 +9,10 @@ import Controlador.Errores;
 import Modelo.ObtenerDatos;
 import Modelo.Principal;
 import com.aeat.valida.Validador;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -176,27 +180,57 @@ public class AltaMedico extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
-        boolean campoBlanco = comprobarCampos();
-        if (campoBlanco)
+        boolean campoBlanco, codigoErroneo;
+        if (campoBlanco = comprobarCampos())
             JOptionPane.showMessageDialog(null, "Rellene todos los campos" ,"Campos vacios", JOptionPane.ERROR_MESSAGE);
         else
-        {
-           recogerInformacion(); //Recogemos la informacion de los campos (la fecha se recoge con el actionPerformed del jDatePicker)
-           boolean banderaDNI;
-            try {
-                banderaDNI = comprobarDNI();
-                System.out.println("Todo correcto");
-                
-                
-                objetoObtenerDatos.nuevoMedico(codigo, nombre, codigoCompañia, precioHora, Nif, fechaElegida);
-                cambiarPanel();
-            } catch (Errores ex) {
-                ex.queError(3);
-                campoNif.setText("");
-            }             
-        }
+            if (codigoErroneo = comprobarCodigoMedico())
+            {
+                JOptionPane.showMessageDialog(null, "El codigo de medico tiene que estar entre 70 y 100" ,"Error codigo Medico", JOptionPane.ERROR_MESSAGE);
+                campoCodigo.setText("");
+            }
+            else
+            {
+               recogerInformacion(); //Recogemos la informacion de los campos (la fecha se recoge con el actionPerformed del jDatePicker)
+               boolean banderaDNI;
+                try {
+                    banderaDNI = comprobarDNI();
+                    objetoObtenerDatos.nuevoMedico(codigo, nombre, codigoCompañia, precioHora, Nif, fechaElegida);
+                    cambiarPanel();
+                } catch (Errores ex) {
+                    ex.queError(3);
+                    campoNif.setText("");
+                    JOptionPane.showMessageDialog(null, "Error en el DNI" ,"ERROR DNI", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                establecerImagenPorDefecto();
+            }
     }//GEN-LAST:event_botonAceptarActionPerformed
 
+    private Boolean comprobarCodigoMedico()
+    {
+        boolean bandera = false;
+        int numero = (Integer.parseInt(campoCodigo.getText()));
+            if (numero < 70 || numero > 100)
+                bandera = true;
+            else
+                bandera = false;
+        return bandera;
+    }
+    
+    private void establecerImagenPorDefecto()
+    {
+            String direccion = "src/Imagenes/defecto.png";
+            String destino = "src/Imagenes/"+codigo+".png";
+           
+            try {
+                Files.copy(Paths.get(direccion), Paths.get(destino),REPLACE_EXISTING);
+            } catch (IOException ex) {
+                System.out.println(ex.toString());
+            }
+    }
+    
+    
     private void jDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePicker1ActionPerformed
         GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
         fechaElegida = fecha.getTime();
@@ -238,7 +272,7 @@ public class AltaMedico extends javax.swing.JPanel {
     private Boolean comprobarCampos()
     {
         boolean bandera = false;
-        if (campoNombre.getText()==null || campoCodigo.getText()==null || campoNif.getText()==null || campoPrecioHora.getText()==null)
+        if (campoNombre.getText().length()== 0 || campoCodigo.getText().length()== 0 || campoNif.getText().length()== 0 || campoPrecioHora.getText().length()== 0 )
             bandera = true;
         else
             bandera=false;

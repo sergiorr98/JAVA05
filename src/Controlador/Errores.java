@@ -19,10 +19,10 @@ public class Errores extends Exception {
         
         String mensaje=error.devolverError(codigoError);
         
+        error.escribirFicheroLog(codigoError);
+        
         System.out.println(mensaje);
     }
-    
-    
-    
+ 
     
 }
