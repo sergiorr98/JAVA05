@@ -22,7 +22,6 @@ class ClaseError {
         
     String mensaje="";
     Date fecha = new Date();
-    //Metodo que recibe el codigo de error, lo monta con la fecha y hora y lo devuelve
     protected String devolverError(int codigoError)
     {
        String fechaCompleta=""+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getYear();
@@ -45,7 +44,6 @@ class ClaseError {
        return mensaje;
     }
     
-    //Metodo que recibe el codigo de error y lo escribe en un fichero log
     protected void escribirFicheroLog (int codigoError)
     {
 

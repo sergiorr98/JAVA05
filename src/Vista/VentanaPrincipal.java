@@ -131,7 +131,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         objeto.setTitle("Iniciar sesión");
         objeto.setVisible(true);
         
-        codComp = objeto.devolverCodigo(); //Metodo que devuelve el codigo que ha tecleado el usuario y se le pasa a las otras opciones
+        codComp = objeto.devolverCodigo();
         
         activarBotones();
         

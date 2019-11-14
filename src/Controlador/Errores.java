@@ -13,7 +13,6 @@ public class Errores extends Exception {
         this.codigoError = codigoError;
     }
     
-    //Metodo que se le pasa el codigo de error, que se lo pasa a los de metodos de la clase ClaseError y posteriormente se muestra el mensaje por pantalla
     public void queError(int codigoError)
     {
         ClaseError error = new ClaseError();
