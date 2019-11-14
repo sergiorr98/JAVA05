@@ -32,13 +32,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VisualizarMedicosAsociados extends javax.swing.JPanel {
 
-    ObtenerDatos objetoObtenerDatos = new ObtenerDatos();
+    ObtenerDatos objetoObtenerDatos = new ObtenerDatos(); //Objeto de la clase de modelo
+    //Atributos y bandera
     private String codigoCompañia;
     private String codigoMedico;
     private int precioHora=0;
     private Boolean fechabien = false;
     int numeroConsultas=0; //Numero de consultas de cada medico
-    ArrayList <Operacion> arrayConsulta = new ArrayList();
+    
+    ArrayList <Operacion> arrayConsulta = new ArrayList(); //ArrayList de las consulas
     
     DefaultTableModel modelo; //Declaracion de los modelos del JTABLE
     
@@ -47,41 +49,42 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         
         initComponents();
         try {
-            objetoObtenerDatos.mostrarDatosMedicos(codigoComp);
+            objetoObtenerDatos.mostrarDatosMedicos(codigoComp); //Llamamos al metodo para que el resultSet tenga la info
             
             modelo = (DefaultTableModel) jTable1.getModel(); //modelo para el JTable1
             codigoCompañia = codigoComp;
             
-            objetoObtenerDatos.avanzar();
+            objetoObtenerDatos.avanzar(); //Avanzamos una posicion
             
             controlBotones(); //Metodo para controlar botones
             
+            //Campos que no se pueden editar
             campoNif.setEditable(false);
             campoNombre.setEditable(false);
             campoCodigo.setEditable(false);
             campoPrecioHora.setEditable(false);
             
-            establecerImagenCompañia(codigoComp);
+            establecerImagenCompañia(codigoComp); //Establecemos la imagen de la compañia
             
-            actualizarDatos();
+            actualizarDatos(); //Actualizamos datos
   
         } catch (Errores ex) {
             ex.queError(1);
         }
     }
     
-    
+    //Metodo para rellenar la tabla consulta
     private void rellenarTablaConsulta(String codigoMedico)
     {
         modelo.setRowCount(0); //Se resetean los modelos
 
         try {
-            numeroConsultas = objetoObtenerDatos.mostrarConsultaMedico(objetoObtenerDatos.devolverColumna(1));
+            numeroConsultas = objetoObtenerDatos.mostrarConsultaMedico(objetoObtenerDatos.devolverColumna(1)); //Recogemos el numero de consultas del medico
             
             
-            if (numeroConsultas>1)
+            if (numeroConsultas>1) //Si es mayor que uno
             {
-                arrayConsulta = objetoObtenerDatos.devolverArrayConsultaMedico();
+                arrayConsulta = objetoObtenerDatos.devolverArrayConsultaMedico(); //Devuelve un array
 
                 Object vector[]; //Creamos un vector de tipo objeto
 
@@ -96,7 +99,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
                jTable1.setModel(modelo); //El modelo se le aplica al JTable
             }
             else
-                if (numeroConsultas == 1)
+                if (numeroConsultas == 1) //Si el numero de consultas es 1
                 {
                    Operacion objeto = (Operacion) objetoObtenerDatos.devolverObjetoConsultaMedico();
                    Object vector[]; //Creamos un vector de tipo objeto
@@ -110,20 +113,22 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
          
     }
     
-    private Object[] obtenerDatos(Operacion objeto) //Objeto de tipo Supermercado
+    private Object[] obtenerDatos(Operacion objeto) //Objeto de tipo Operacion
     {
         Object vector[] = new Object[5]; //Creamos un vector del mismo numero de campos que la tabla
      
+        //Rellenamos
         vector[0] = objeto.getMed_con();
         vector[1] = objeto.getPac_con();
         vector[2] = objeto.getCod_consulta();
         vector[3] = objeto.getTiempo();
         vector[4] = (precioHora * objeto.getTiempo());
         
-        return vector;
+        return vector; //Devolvemos el vector
     }
     
 
+    //Establecemos la imagen de la compañia
     private void establecerImagenCompañia(String codigo)
     {
         String url="src/Imagenes/"+codigo+".png";
@@ -352,10 +357,10 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         actualizarDatos(); //Metodo para actualizar datos
     }//GEN-LAST:event_botonAdelanteActionPerformed
 
+    //Boton para editar las fotos
     private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
-        
-       
- 
+
+        //Creamos un filtro de ".PNG"
         FileNameExtensionFilter filter = new FileNameExtensionFilter ("Archivos .png","png");
         jFileChooser1.setFileFilter(filter);
         jFileChooser1.addChoosableFileFilter(filter);
@@ -364,50 +369,54 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         
          int seleccion = jFileChooser1.showDialog(this,"Seleccionar imagen");
         
-        if (seleccion == JFileChooser.APPROVE_OPTION)
+        if (seleccion == JFileChooser.APPROVE_OPTION) //Cuando apriete aceptar
         {
-            File archivo = jFileChooser1.getSelectedFile();
+            File archivo = jFileChooser1.getSelectedFile(); //Se selecciona el fichero
             
-            String direccion = archivo.getPath();
-            String destino = "src/Imagenes/"+codigoMedico+".png";
+            String direccion = archivo.getPath(); //Se coge la direccion del fichero
+            String destino = "src/Imagenes/"+codigoMedico+".png"; //La de destino
             
-            ImageIcon icon = new ImageIcon (direccion);
-            icon = redimensionarImagen(icon);
+            ImageIcon icon = new ImageIcon (direccion); //Se crea un icon con la direccion del fichero
+            icon = redimensionarImagen(icon); //Se llama a la funcion para convertirla en icon
             
             try {
-                Files.copy(Paths.get(direccion), Paths.get(destino),REPLACE_EXISTING);
+                Files.copy(Paths.get(direccion), Paths.get(destino),REPLACE_EXISTING); //Se reemplaza
                 //adaptarImagen(icon);
             } catch (IOException ex) {
            
             }
-            campoFoto.setIcon(icon);
+            campoFoto.setIcon(icon); //Se coloca en el campo de la foto
         }
     }//GEN-LAST:event_botonEditarActionPerformed
 
+    //Metodo para redimensionar la imagen
     private ImageIcon redimensionarImagen (ImageIcon icon)
     {
-        Image imagen = icon.getImage();
+        Image imagen = icon.getImage(); //Se recoge la imagen del icono
         
         imagen = imagen.getScaledInstance(160, 160, Image.SCALE_SMOOTH);
         
-        return new ImageIcon(imagen);
+        return new ImageIcon(imagen); //Y se devuelve
     }
     
+    //Metodo para visualizar las consultas
     private void botonNuevaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevaConsultaActionPerformed
 
+        //Se sobrepone panel de los pacienets
         VentanaPrincipal obj = new VentanaPrincipal();
         
         MostrarPacientes objeto = new MostrarPacientes(obj,true, codigoMedico);
         objeto.setTitle("LISTA DE PACIENTES");
         objeto.setVisible(true);
         
+        //Se recoge los datos de interes
         int codigoPaciente = objeto.codigoPaciente;
         String tiempoSeleccionado = objeto.tiempoSeleccionado;
         
-        numeroConsultas = numeroConsultas + 1;
+        numeroConsultas = numeroConsultas + 1; //Se suma 1 al numero de consultas
         
         try {
-            objetoObtenerDatos.nuevaConsulta(codigoMedico, codigoPaciente, tiempoSeleccionado, numeroConsultas);
+            objetoObtenerDatos.nuevaConsulta(codigoMedico, codigoPaciente, tiempoSeleccionado, numeroConsultas); //Pasamos la info para crear la nueva consulta     
         } catch (Errores ex) {
             ex.queError(1);
         }
@@ -417,15 +426,17 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
         
     }//GEN-LAST:event_botonNuevaConsultaActionPerformed
 
+    //Metodo para recoger la fecha
     private void jDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePicker1ActionPerformed
-         GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
+        GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
         Date nuevaFecha = fecha.getTime();
         int actualizados;
         try {
-            comprobarFecha(fecha);
-            actualizados = objetoObtenerDatos.modificarFecha(nuevaFecha,objetoObtenerDatos.devolverColumna(1));
+            comprobarFecha(fecha); //Se comprueva fecha
+            actualizados = objetoObtenerDatos.modificarFecha(nuevaFecha,objetoObtenerDatos.devolverColumna(1)); //Se pasa para modificar fecha y devuelve el numero de filas actualizadas
            if (actualizados >= 1)
            {
+               //Nos volvemos al primero
                 objetoObtenerDatos.mostrarDatosMedicos(codigoCompañia);
                 objetoObtenerDatos.primero();
                 actualizarDatos();
@@ -433,12 +444,12 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Se han actualizado "+actualizados+" fila(s)" ,"Informacion de actualizacion", JOptionPane.PLAIN_MESSAGE);
            }
         } catch (Errores ex) {
-            ex.queError(2);
+            ex.queError(2); //Salta el error personalizado de la fecha
             JOptionPane.showMessageDialog(null, "Error en la fecha" ,"Error fecha", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jDatePicker1ActionPerformed
     
-    
+    //Metodo para comprobar fecha
     private void comprobarFecha (GregorianCalendar fecha) throws Errores
     {   
         String f;
@@ -453,7 +464,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
        
         Date fechaActual = fechaMedico.getTime();
 
-        
+        //Si la fecha es mas pequeña que la actual se lanza el error
         if (fechaElegida.before(fechaActual))
             throw new Errores(2);
 

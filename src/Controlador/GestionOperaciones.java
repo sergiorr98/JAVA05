@@ -13,16 +13,18 @@ import java.util.Date;
 
 public class GestionOperaciones {
     
+    //ResultSet
      ResultSet datosMedicos;
      ResultSet datosConsultasMedicas;
      ResultSet datosPacientes;
-     
+     //Statement y PreparedStatement
      Statement sentencia;
      PreparedStatement sentenciaPreparada;
-     
+     //Objeto de la clase Conexion para devolver la conexion y poder hacer las sentencias
     Conexion con = new Conexion();
 
 
+    //En el constructor se instancia la sentencia
     public GestionOperaciones() {
         
          try {
@@ -33,10 +35,14 @@ public class GestionOperaciones {
         
     }
 
-    public void MostrarMedicos (String consulta) throws SQLException
-    {
-
-        datosMedicos = sentencia.executeQuery(consulta);   
+    //Metodo que muestra medicos
+    public void MostrarMedicos (String consulta, int codigo) throws SQLException
+    {       
+        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        
+        sentenciaPreparada.setInt(1,codigo);
+    
+        datosMedicos = sentenciaPreparada.executeQuery();    
     }
         
     //Metodo para avanzar
@@ -83,23 +89,25 @@ public class GestionOperaciones {
         return datosMedicos.getString(i);
     }
     
-    
+    //Metodo para modificar la fecha que devuelve el numero de filas afectadas
     public int updateFecha (Date fecha, String codigoMedico, String consulta) throws SQLException
     {
         int filasAct = 0;
         
-        java.sql.Date fechaN = new java.sql.Date(fecha.getTime());
+        java.sql.Date fechaN = new java.sql.Date(fecha.getTime()); //Creamos fecha con formato SQL
         
-        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); //Configuramos la sentencia preparada
         
+        //Valores
         sentenciaPreparada.setDate(1,fechaN);
         sentenciaPreparada.setInt(2,Integer.parseInt(codigoMedico));
         
-        return filasAct = sentenciaPreparada.executeUpdate();
+        return filasAct = sentenciaPreparada.executeUpdate(); //Devuelve el numero de filas afectas
 
                 
     }
     
+    //Metodo para mostrar las consultas de los medicos, que devuelve un tamaño (para ver si se devuelve un objeto o una ArrayList)
     public int selectConsultaMedico (String consulta, int codigoMedico) throws SQLException
     {
 
@@ -111,14 +119,16 @@ public class GestionOperaciones {
     
         datosConsultasMedicas = sentenciaPreparada.executeQuery();
                 
+        //Se hace un ResultSet de copia para obtener el tamaño
         copia = datosConsultasMedicas;
         copia.last();
         int tamaño = copia.getRow();
         copia.first();
         
-        return tamaño;
+        return tamaño;//Se devuelve el tamaño
     }
     
+    //Si el tamaño del metodo anterior es mayor que 1 se devuelve la informacion en un ArrayList
     public ArrayList listaConsultas() throws SQLException
     {
         ArrayList <Operacion> array = new ArrayList();
@@ -135,14 +145,14 @@ public class GestionOperaciones {
         
         return array;
     }
-    
+    //Si el tamaño del metodo anterior es igual a 1 se devuelve la informacion en un objeto
     public Object objetoConsulta() throws SQLException
     {
         Operacion objeto = new Operacion (datosConsultasMedicas.getInt(1),datosConsultasMedicas.getInt(2), datosConsultasMedicas.getInt(3), datosConsultasMedicas.getInt(4), datosConsultasMedicas.getInt(5));
         return objeto;
     }
     
-    
+    //Metood que devuelve todos los pacientes en un ArrayList
     public ArrayList selectPaciente(String consulta) throws SQLException
     {
         ArrayList <Paciente> array = new ArrayList();
@@ -163,7 +173,7 @@ public class GestionOperaciones {
         return array;
     }
     
-    
+    //Metood para insertar una Consulta
     public void insertConsulta (String consulta, int codigoMedico, int codigoPaciente, int tiempoConsulta, int numeroConsulta) throws SQLException
     {
         sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -177,9 +187,9 @@ public class GestionOperaciones {
         
     }
     
+    //Metodo para insertar medicos
     public void insertMedico (String consulta, int codigoMedico, String nombreMedico, int codigoCompañia, int precioHora, String nifMedico, Date fechaElegida) throws SQLException
     {
-        //INSERT INTO MEDICO VALUES (65,'54179084P',10,'Alvaro','2019/10/12',40);
         sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         
         java.sql.Date fechaN = new java.sql.Date(fechaElegida.getTime());

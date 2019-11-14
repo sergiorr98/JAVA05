@@ -42,18 +42,18 @@ public class MostrarPacientes extends javax.swing.JDialog {
         mostrarLista(); //Se muestra la lista   
     }
 
-    
+    //Metodo de mostrarLista
     public void mostrarLista()
     {
         int contador = 0;
         
         try {
-            arrayPaciente = objetoObtenerDatos.mostrarPacientes();
+            arrayPaciente = objetoObtenerDatos.mostrarPacientes();//Recogemos el arraylist de pacientes
         } catch (Errores ex) {
             ex.queError(1);
         }
     
-        while (contador < arrayPaciente.size())
+        while (contador < arrayPaciente.size()) //Lo vamos añadiendo al modelo
         {
             Paciente objeto = arrayPaciente.get(contador);
             modeloList.addElement("CODIGO: "+objeto.getCod_pac()+" ||     APELLIDO: "+objeto.getApellido_pac()+" ||     EDAD: "+objeto.getEdad_pac());
@@ -170,6 +170,7 @@ public class MostrarPacientes extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Metodo para con el mouse clicked rellenar el textfield
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         
         int indice = jList1.getSelectedIndex();
@@ -182,6 +183,7 @@ public class MostrarPacientes extends javax.swing.JDialog {
         
     }//GEN-LAST:event_jList1MouseClicked
 
+    //Metodo para recoger la info restante
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         
         if (campoTiempo.getText().length() == 0)
