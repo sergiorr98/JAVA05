@@ -20,6 +20,7 @@ public class Conexion {
     
     public Statement objeto;
    
+    //Metodo para la conexion con Postgres
     public static void crearConexionPostgres(String pass) throws Errores, ClassNotFoundException, SQLException, java.lang.Exception
     {
         if (pass.equalsIgnoreCase(contraseña))
@@ -32,7 +33,7 @@ public class Conexion {
               //Class.forName("org.mysql.Driver");
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url = "jdbc:postgresql://192.168.137.130:5432/HOSPITAL";
+                    String url = "jdbc:postgresql://localhost:5432/HOSPITAL";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
@@ -49,7 +50,7 @@ public class Conexion {
         }
     }
     
-    
+    //Metodo para la conexion con MySql
     public static void crearConexionMysql(String pass) throws Errores, ClassNotFoundException, SQLException, java.lang.Exception
     {
         if (pass.equalsIgnoreCase(contraseña))
@@ -62,7 +63,7 @@ public class Conexion {
 
                     //url es un texto que contiene la ruta del nombre o la direccion
                     //de conexon de la base da Datos conectada al JDBC
-                    String url2 = "jdbc:mysql://192.168.137.130:3306/HOSPITAL?useSSL=false";
+                    String url2 = "jdbc:mysql://localhost:3306/HOSPITAL?useSSL=false";
 
                     //Con es el objeto creado para la coneccion donde se especifican los
                     //parametros de la ubicacion de la BD, login si la base de datos
@@ -79,39 +80,42 @@ public class Conexion {
         }
     }
 
+    //Metodo que devuelve la conexion para poder acceder a la conexion en las consultas
     public Connection devolverConexion() throws SQLException
     {
         
         return conPostgres;
     }
 
+    //Metodo para validar compañia que se le pasa el codigo de Compañia y se hace un PrepareStatemente
     public Boolean validarCompañia(String contraseña) throws SQLException,Errores
     {
         try {
-            
-            String usuario = "Sanitas";
+            //ResultSet
             ResultSet RsetPost;
             ResultSet RsetMysQL;
+            //PrepardStatemtent
             PreparedStatement comprobacion;
             
-            String consulta = "SELECT * FROM COMPAÑIA WHERE COD_COMP= ?";
+            String consulta = "SELECT * FROM COMPAÑIA WHERE COD_COMP= ?"; //Consulta
             
-            comprobacion = conPostgres.prepareStatement(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            comprobacion = conPostgres.prepareStatement(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); //Hacemos el prepareStatement
             
-            comprobacion.setInt(1, Integer.parseInt(contraseña));
+            comprobacion.setInt(1, Integer.parseInt(contraseña)); //Pasamos el parametro "contraseña"
             
-            RsetPost = comprobacion.executeQuery();
+            RsetPost = comprobacion.executeQuery(); //Recogemos con un ResultSet
             
+            //Se repite el proceso son MySql
             comprobacion = conMysql.prepareStatement(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
             comprobacion.setInt(1, Integer.parseInt(contraseña));
             
             RsetMysQL = comprobacion.executeQuery();
             
-            if (RsetPost.next() && RsetMysQL.next()) {                
+            if (RsetPost.next() && RsetMysQL.next()) {  //Si ambos ResultSet devuelven informacion devuelven True
                 System.out.println("Inicio de sesion bien");
                 return true;
-            } else {
+            } else { //En caso contrario se lanza los errores
                 System.out.println("Inicio de sesion mal");
                 throw new Errores(1);
             }
@@ -128,7 +132,7 @@ public class Conexion {
     {
         try
         {
-            //Cierra la conexion de la Base de Datos
+            //Cierra la conexion de la Base de Datos Postgres y MySql
             conPostgres.close();
             conMysql.close();
             System.out.println("Cerrada la conexion con la Base de Datos");

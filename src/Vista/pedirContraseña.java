@@ -126,16 +126,17 @@ public class pedirContraseña extends javax.swing.JDialog {
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
 
         try {
-            Conexion obj = new Conexion();
+            Conexion obj = new Conexion(); //Se crea objeto de la conexion
+            //Se le pasa a ambos metodos
             crearConexionPostgres(jPasswordField1.getText());
             crearConexionMysql(jPasswordField1.getText());
 
             System.out.println("Conexion inicial correcta");
                 
                 try {
-                    obj.validarCompañia(jTextField1.getText());
-                    codigoCompañia = jTextField1.getText();
-                    dispose();
+                    obj.validarCompañia(jTextField1.getText()); //Validamos la compañia
+                    codigoCompañia = jTextField1.getText();//La guardamos para despues pasarla
+                    dispose();//Cerramos la ventana
                 } catch (SQLException ex){
                     Logger.getLogger(pedirContraseña.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Usuario o  Contraseña incorrecto" ,"Error", JOptionPane.ERROR_MESSAGE);
@@ -154,6 +155,7 @@ public class pedirContraseña extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botonAceptarActionPerformed
 
+    //Metodo para devolver el codigo de compañia
     public String devolverCodigo ()
     {
         return codigoCompañia;
