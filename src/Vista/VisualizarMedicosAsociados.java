@@ -6,6 +6,7 @@
 package Vista;
 
 import Controlador.Errores;
+import Modelo.Medico;
 import Modelo.Operacion;
 import Modelo.ObtenerDatos;
 import java.awt.Image;
@@ -430,9 +431,12 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
     private void jDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDatePicker1ActionPerformed
         GregorianCalendar fecha = new GregorianCalendar(jDatePicker1.getModel().getYear(), jDatePicker1.getModel().getMonth(), jDatePicker1.getModel().getDay());
         Date nuevaFecha = fecha.getTime();
+        String f;
         int actualizados;
         try {
-            comprobarFecha(fecha); //Se comprueva fecha
+            Medico obj = new Medico();
+            f = objetoObtenerDatos.devolverColumna(5);
+            obj.comprobarFecha(fecha,f); //Se comprueva fecha
             actualizados = objetoObtenerDatos.modificarFecha(nuevaFecha,objetoObtenerDatos.devolverColumna(1)); //Se pasa para modificar fecha y devuelve el numero de filas actualizadas
            if (actualizados >= 1)
            {
@@ -448,27 +452,7 @@ public class VisualizarMedicosAsociados extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Error en la fecha" ,"Error fecha", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jDatePicker1ActionPerformed
-    
-    //Metodo para comprobar fecha
-    private void comprobarFecha (GregorianCalendar fecha) throws Errores
-    {   
-        String f;
 
-         f = objetoObtenerDatos.devolverColumna(5);
-            
-        String fechaDevuelta[] = f.split("-");
-        Date fechaElegida = fecha.getTime();
-        
-           
-        GregorianCalendar fechaMedico = new GregorianCalendar(Integer.parseInt(fechaDevuelta[0]),(Integer.parseInt(fechaDevuelta[1]))-1, Integer.parseInt(fechaDevuelta[2]));
-       
-        Date fechaActual = fechaMedico.getTime();
-
-        //Si la fecha es mas pequeña que la actual se lanza el error
-        if (fechaElegida.before(fechaActual))
-            throw new Errores(2);
-
-    }
 
     //Metodo para actualizar datos
     private void actualizarDatos()

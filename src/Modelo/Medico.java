@@ -1,7 +1,9 @@
 
 package Modelo;
 
+import Controlador.Errores;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -22,6 +24,11 @@ public class Medico {
         this.nombre_med = nombre_med;
         this.fecha_med = fecha_med;
         this.precioHora_med = precioHora_med;
+    }
+    
+    public Medico()
+    {
+        
     }
 
     public int getCod_med() {
@@ -72,6 +79,25 @@ public class Medico {
         this.precioHora_med = precioHora_med;
     }
     
+        
+    //Metodo para comprobar fecha
+    public void comprobarFecha (GregorianCalendar fecha, String f) throws Errores
+    {   
+        
+        //Recogemos la fecha actual en un vector de String con el separador que utilice
+        String fechaDevuelta[] = f.split("-");
+        Date fechaElegida = fecha.getTime(); //Recogemos en tipo Date la fecha nueva
+        
+        //Pasamos la fecha actuala GregorianCalendar y despues a tipo Date para despues comprobar
+        GregorianCalendar fechaMedico = new GregorianCalendar(Integer.parseInt(fechaDevuelta[0]),(Integer.parseInt(fechaDevuelta[1]))-1, Integer.parseInt(fechaDevuelta[2]));
+       
+        Date fechaActual = fechaMedico.getTime();
+
+        //Si la fecha es mas pequeña que la actual se lanza el error
+        if (fechaElegida.before(fechaActual))
+            throw new Errores(2);
+
+    }
     
     
     
