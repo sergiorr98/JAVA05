@@ -123,16 +123,13 @@ public class ObtenerDatos {
     }
     
     //Metodo que crea un nuevo medico
-    public void nuevoMedico(String codigoMedico, String nombreMedico, String codigoCompañia, String precioHora, String nifMedico, Date fechaElegida) throws Errores
+    public void nuevoMedico(Object objeto) throws Errores
     {
-        int codigoM = Integer.parseInt(codigoMedico);
-        int codigoComp = Integer.parseInt(codigoCompañia);
-        int precioH = Integer.parseInt(precioHora);
         
         String consulta = "INSERT INTO MEDICO VALUES (?,?,?,?, ?,?);";
         
         try {
-            gestion.insertMedico(consulta, codigoM, nombreMedico, codigoComp, precioH, nifMedico, fechaElegida);
+            gestion.insertMedico(consulta, objeto);
         } catch (SQLException ex) {
             System.out.println(ex.toString());
             throw new Errores(1);

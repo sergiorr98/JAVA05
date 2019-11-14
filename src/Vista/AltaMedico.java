@@ -6,6 +6,7 @@
 package Vista;
 
 import Controlador.Errores;
+import Modelo.Medico;
 import Modelo.ObtenerDatos;
 import Modelo.Principal;
 import com.aeat.valida.Validador;
@@ -198,10 +199,10 @@ public class AltaMedico extends javax.swing.JPanel {
             else
             {
                recogerInformacion(); //Recogemos la informacion de los campos (la fecha se recoge con el actionPerformed del jDatePicker)
-               boolean banderaDNI;
                 try {
-                    banderaDNI = comprobarDNI(); //Se comprueba el dni
-                    objetoObtenerDatos.nuevoMedico(codigo, nombre, codigoCompañia, precioHora, Nif, fechaElegida); //Se llama al metodo de Nuevo Medico
+                    //Creamos objeto y se lo pasamos a modelo
+                    Medico obj = new Medico(Integer.parseInt(codigo),Nif,Integer.parseInt(codigoCompañia),nombre,fechaElegida,Integer.parseInt(precioHora));
+                    objetoObtenerDatos.nuevoMedico(obj); //Se llama al metodo de Nuevo Medico
                     cambiarPanel();//cambiamos panel
                 } catch (Errores ex) {
                     ex.queError(3); //Lanzamos error de DNI personalizado
@@ -261,20 +262,7 @@ public class AltaMedico extends javax.swing.JPanel {
         
         Principal.cambioDePanel(obj);
     }
-    //Metodo para comprobar el DNI
-    private Boolean comprobarDNI() throws Errores
-    {
-        Boolean bien = false;
-        
-        Validador val =  new Validador();
-        int resultado = val.checkNif(Nif);
-        if (resultado > 0)
-            bien = true;
-        else
-            throw new Errores(3);
-            
-        return bien;
-    }
+
   //Metodo para recoger la informacion  
     private void recogerInformacion()
     {

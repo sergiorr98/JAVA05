@@ -2,6 +2,7 @@
 package Modelo;
 
 import Controlador.Errores;
+import com.aeat.valida.Validador;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -17,9 +18,9 @@ public class Medico {
     protected Date fecha_med; //Fecha
     protected int precioHora_med; //Precio por hora
 
-    public Medico(int cod_med, String nif_med, int comp_med, String nombre_med, Date fecha_med, int precioHora_med) {
+    public Medico(int cod_med, String nif_med, int comp_med, String nombre_med, Date fecha_med, int precioHora_med) throws Errores {
         this.cod_med = cod_med;
-        this.nif_med = nif_med;
+        setNif_med(nif_med);
         this.comp_med = comp_med;
         this.nombre_med = nombre_med;
         this.fecha_med = fecha_med;
@@ -43,8 +44,14 @@ public class Medico {
         return nif_med;
     }
 
-    public void setNif_med(String nif_med) {
-        this.nif_med = nif_med;
+    public void setNif_med(String nif_med) throws Errores {
+        Validador val =  new Validador();
+        int resultado = val.checkNif(nif_med);
+        if (resultado > 0)
+            this.nif_med = nif_med;
+        else
+            throw new Errores(3);
+
     }
 
     public int getComp_med() {

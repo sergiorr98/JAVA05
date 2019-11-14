@@ -1,6 +1,7 @@
 
 package Controlador;
 
+import Modelo.Medico;
 import Modelo.Operacion;
 import Modelo.Paciente;
 import java.sql.PreparedStatement;
@@ -188,18 +189,20 @@ public class GestionOperaciones {
     }
     
     //Metodo para insertar medicos
-    public void insertMedico (String consulta, int codigoMedico, String nombreMedico, int codigoCompañia, int precioHora, String nifMedico, Date fechaElegida) throws SQLException
+    public void insertMedico (String consulta, Object objeto) throws SQLException
     {
         sentenciaPreparada = con.devolverConexion().prepareStatement(consulta,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         
-        java.sql.Date fechaN = new java.sql.Date(fechaElegida.getTime());
         
-        sentenciaPreparada.setInt(1, codigoMedico);
-        sentenciaPreparada.setString(2, nifMedico);
-        sentenciaPreparada.setInt(3, codigoCompañia);
-        sentenciaPreparada.setString(4,nombreMedico);
+        
+        java.sql.Date fechaN = new java.sql.Date(((Medico)objeto).getFecha_med().getTime());
+        
+        sentenciaPreparada.setInt(1, ((Medico)objeto).getCod_med());
+        sentenciaPreparada.setString(2, ((Medico)objeto).getNif_med());
+        sentenciaPreparada.setInt(3, ((Medico)objeto).getComp_med());
+        sentenciaPreparada.setString(4,((Medico)objeto).getNombre_med());
         sentenciaPreparada.setDate(5,fechaN);
-        sentenciaPreparada.setInt(6, precioHora);
+        sentenciaPreparada.setInt(6, ((Medico)objeto).getPrecioHora_med());
         
         sentenciaPreparada.execute();
     }
